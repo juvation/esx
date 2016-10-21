@@ -1,0 +1,219 @@
+
+offset,size,notes
+
+FILE
+
+0x00000000	00000032		32 unknown bytes starting with KORG... 0x71 ESX
+0x00000020	00000192		GLOBAL_PARAMETERS
+0x000000e0	00000288		unknown/reserved
+0x00000200	01095680		256 x PATTERN at 4280 bytes
+0x0010ba00	00148992		unknown/reserved
+0x00130000	00033792		64 x SONG at 528 bytes
+0x00138400	00160000		20000 x SONG_EVENT at 8 bytes
+0x0015f500	00330496		unknown/reserved
+0x001b0000	00000032		32 unknown bytes starting with KORG... 0x71 B P S
+0x001b0020	00000004		number of mono samples in use
+0x001b0024	00000004		number of stereo samples in use
+0x001b0028	00000004		current sample offset
+0x001b002c	00000212		unknown/reserved
+0x001b0100	00010240		256 x MONO_SAMPLE_HEADER at 40 bytes
+0x001b2900	00005632		128 x STEREO_SAMPLE_HEADER at 44 bytes
+0x001b3f00	00000768		unknown/reserved
+0x001b4200	00524288		256 x SLICE at 2048 bytes
+0x00250000	25165824		sample data
+
+GLOBAL_PARAMETERS (192 bytes)
+
+0x00000000	00000001		memory protect enabled
+0x00000001	00000001		reserved
+0x00000002	00000001		arpeggiator control
+0x00000003	00000001		audio in mode
+0x00000004	00000001		midi clock mode
+0x00000005	00000001		MIDI_MESSAGE_ENABLE_FLAGS
+0x00000006	00000001		pitch bend range
+0x00000007	00000003		drum, key part 1, key part 2 midi channels
+0x0000000a	00000013		part note numbers
+0x00000017	00000033		midi control change assignments
+0x00000038	00000004		reserved long
+0x00000040	00000128		pattern set parameters (?)
+
+PATTERN (4280 bytes)
+
+0x00000000	00000008		name - zero filled
+0x00000008	00000002		tempo
+0x0000000a	00000001		swing
+0x0000000b	00000001		PATTERN_CONFIG_FLAGS
+0x0000000c	00000001		fx chain
+0x0000000d	00000001		last step
+0x0000000e	00000001		ARP_CONFIG_FLAGS
+0x0000000f	00000001		arp centre note
+0x00000010	00000002		mute status
+0x00000012	00000002		swing status
+0x00000014	00000002		output bus status
+0x00000016	00000002		accent status
+0x00000018	00000306		9 x DRUM_PART at 34 bytes
+0x00000018	00000548		2 x KEYBOARD_PART at 274 bytes
+0x0000036e	00000096		3 x STRETCH_SLICE_PART at 32 bytes
+0x000003ce	00000156		1 x AUDIO_IN_PART at 156 bytes
+0x0000046a	00000018		1 x ACCENT_PART at 18 bytes
+0x0000047c	00000012		3 x FX_PARAMETERS at 4 bytes
+0x00000488	00003120		24 x MOTION_PARAMETERS at 130 bytes
+
+DRUM_PART (34 bytes)
+
+0x00000000	00000002		sample pointer (sample number?)
+0x00000002	00000001		slice number
+0x00000003	00000001		reserved
+0x00000004	00000001		filter type
+0x00000005	00000001		filter cutoff
+0x00000006	00000001		filter resonance
+0x00000007	00000001		filter envelope depth
+0x00000008	00000001		pitch
+0x00000009	00000001		level
+0x0000000a	00000001		pan
+0x0000000b	00000001		envelope time
+0x0000000c	00000001		sample start point
+0x0000000d	00000001		PART_PARAM_FLAGS (fx, roll, amp env type, reverse)
+0x0000000e	00000001		PART_PARAM_FLAGS_2 (mod dest, mod type, bpm sync)
+0x0000000f	00000001		mod speed
+0x00000010	00000001		mod depth
+0x00000011	00000001		motion sequence status
+0x00000012	00000016		SEQUENCE_DATA
+
+KEYBOARD_PART (274 bytes)
+
+0x00000000	00000002		sample pointer (sample number?)
+0x00000002	00000001		slice number
+0x00000003	00000001		reserved
+0x00000004	00000001		glide
+0x00000005	00000001		filter type
+0x00000006	00000001		filter cutoff
+0x00000007	00000001		filter resonance
+0x00000008	00000001		filter envelope depth
+0x00000009	00000001		level
+0x0000000a	00000001		pan
+0x0000000b	00000001		envelope time
+0x0000000d	00000001		sample start point
+0x0000000d	00000001		PART_PARAM_FLAGS (fx, roll, amp env type, reverse)
+0x0000000e	00000001		PART_PARAM_FLAGS_2 (mod dest, mod type, bpm sync)
+0x0000000f	00000001		mod speed
+0x00000010	00000001		mod depth
+0x00000011	00000001		motion sequence status
+0x00000012	00000128		SEQUENCE_DATA_NOTE
+0x00000092	00000128		SEQUENCE_DATA_GATE
+
+STRETCH_SLICE_PART (32 bytes)
+
+0x00000000	00000002		sample pointer (sample number?)
+0x00000002	00000001		filter type
+0x00000003	00000001		filter cutoff
+0x00000004	00000001		filter resonance
+0x00000005	00000001		filter envelope depth
+0x00000006	00000001		pitch
+0x00000007	00000001		level
+0x00000008	00000001		pan
+0x00000009	00000001		envelope time
+0x0000000a	00000001		sample start point
+0x0000000b	00000001		PART_PARAM_FLAGS (fx, roll, amp env type, reverse)
+0x0000000c	00000001		PART_PARAM_FLAGS_2 (mod dest, mod type, bpm sync)
+0x0000000d	00000001		mod speed
+0x0000000e	00000001		mod depth
+0x0000000f	00000001		motion sequence status
+0x00000010	00000016		SEQUENCE_DATA
+
+AUDIO_IN_PART (156 bytes)
+
+0x00000000	00000001		filter type
+0x00000001	00000001		filter cutoff
+0x00000002	00000001		filter resonance
+0x00000003	00000001		filter envelope depth
+0x00000004	00000001		level
+0x00000005	00000001		pan
+0x00000006	00000001		envelope time
+0x00000007	00000001		PART_PARAM_FLAGS (fx, roll, amp env type, reverse)
+0x00000008	00000001		PART_PARAM_FLAGS_2 (mod dest, mod type, bpm sync)
+0x00000009	00000001		mod speed
+0x0000000a	00000001		mod depth
+0x0000000b	00000001		motion sequence status
+0x0000000c	00000016		SEQUENCE_DATA
+0x0000001c	00000128		SEQUENCE_DATA_GATE
+
+ACCENT_PART (18 bytes)
+
+0x00000000	00000001		level
+0x00000001	00000001		motion sequence status
+0x00000002	00000016		SEQUENCE_DATA
+
+FX_PARAMETERS (4 bytes)
+
+0x00000000	00000001		effect type
+0x00000001	00000001		edit1
+0x00000002	00000001		edit2
+0x00000003	00000001		motion sequence status
+
+MOTION_PARAMETERS (130 bytes)
+
+0x00000000	00000002		operation number
+0x00000002	000000128		motion operations
+
+SONG (528 bytes)
+
+0x00000000	00000008		name
+0x00000008	00000002		tempo
+0x0000000a	00000001		tempo lock
+0x0000000b	00000001		song length
+0x0000000c	00000001		mute hold
+0x0000000d	00000001		next song number
+0x0000000e	00000002		num song events
+0x00000010	00000256		pattern numbers
+0x00000110	00000256		note offsets
+
+SONG_EVENT (8 bytes)
+
+?
+
+MONO_SAMPLE_HEADER (40 bytes)
+
+0x00000000	00000008		name - zero filled
+0x00000008	00000004		offset start
+0x0000000c	00000004		offset end
+0x00000010	00000004		start
+0x00000014	00000004		end
+0x00000018	00000004		loop start
+0x0000001c	00000004		sample rate
+0x00000020	00000002		sample tune
+0x00000022	00000001		level
+0x00000023	00000001		reserved
+0x00000024	00000001		stretch step
+0x00000025	00000001		reserved
+0x00000026	00000001		reserved
+0x00000027	00000001		reserved
+
+STEREO_SAMPLE_HEADER (44 bytes)
+
+0x00000000	00000008		name - zero filled
+0x00000008	00000004		offset channel 1 start
+0x0000000c	00000004		offset channel 1 end
+0x00000010	00000004		offset channel 2 start
+0x00000014	00000004		offset channel 2 end
+0x00000018	00000004		start
+0x0000001c	00000004		end
+0x00000020	00000004		sample rate
+0x00000024	00000002		sample tune
+0x00000026	00000001		level
+0x00000027	00000001		reserved
+0x00000028	00000001		stretch step
+0x00000029	00000001		reserved
+0x0000002a	00000001		reserved
+0x0000002b	00000001		reserved
+
+
+
+
+
+
+
+
+
+
+
