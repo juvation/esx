@@ -14,7 +14,7 @@ extends BufferManager
 		
 		for (int i = 0; i < 9; i++)
 		{
-			this.drumParts [i] = new ESXDrumPart (this.buffer, DRUM_PARTS_OFFSET + (ESXDrumPart.BUFFER_SIZE));
+			this.drumParts [i] = new ESXDrumPart (this.buffer, this.offset + DRUM_PARTS_OFFSET + (i * ESXDrumPart.BUFFER_SIZE));
 		}
 	}
 
@@ -31,11 +31,14 @@ extends BufferManager
 		System.err.println ("tempo = " + integerTempo + "." + fractionTempo);
 		System.err.println ("last step = " + getByte (LAST_STEP_OFFSET));
 		
-		for (int i = 0; i < 9; i++)
-		{
-			System.err.println ("drum part " + i);
-			this.drumParts [i].dump ();
-		}
+		System.err.println ("drum part 0");
+		this.drumParts [0].dump ();
+
+		System.err.println ("drum part 1");
+		this.drumParts [1].dump ();
+
+		System.err.println ("drum part 2");
+		this.drumParts [2].dump ();
 	}
 	
 	// PUBLIC CONSTANTS

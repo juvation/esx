@@ -62,8 +62,7 @@ PATTERN (4280 bytes)
 DRUM_PART (34 bytes)
 
 0x00000000	00000002		sample pointer (sample number?)
-0x00000002	00000001		slice number
-0x00000003	00000001		reserved
+0x00000002	00000002		slice number
 0x00000004	00000001		filter type
 0x00000005	00000001		filter cutoff
 0x00000006	00000001		filter resonance
@@ -83,8 +82,7 @@ DRUM_PART (34 bytes)
 KEYBOARD_PART (274 bytes)
 
 0x00000000	00000002		sample pointer (sample number?)
-0x00000002	00000001		slice number
-0x00000003	00000001		reserved
+0x00000002	00000002		slice number
 0x00000004	00000001		glide
 0x00000005	00000001		filter type
 0x00000006	00000001		filter cutoff

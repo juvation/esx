@@ -26,8 +26,8 @@ extends BufferManager
 	public void
 	dump ()
 	{
-		System.err.println ("number of mono samples = " + getLong (NUM_MONO_SAMPLES_OFFSET));
-		System.err.println ("number of stereo samples = " + getLong (NUM_STEREO_SAMPLES_OFFSET));
+		System.err.println ("number of mono samples = " + getInteger (NUM_MONO_SAMPLES_OFFSET));
+		System.err.println ("number of stereo samples = " + getInteger (NUM_STEREO_SAMPLES_OFFSET));
 		
 		this.patterns [0].dump ();
 	}

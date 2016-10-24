@@ -9,8 +9,14 @@ public class BufferManager
 		this.offset = inOffset;
 	}
 
+	public byte
+	getByte (int inOffset)
+	{
+		return this.buffer [this.offset + inOffset];
+	}
+	
 	public byte[]
-	getBuffer (int inOffset, int inLength)
+	getBytes (int inOffset, int inLength)
 	{
 		byte[]	result = new byte [inLength];
 		
@@ -22,27 +28,25 @@ public class BufferManager
 		return result;
 	}
 	
-	public byte
-	getByte (int inOffset)
-	{
-		return this.buffer [this.offset + inOffset];
-	}
-	
 	public short
 	getShort (int inOffset)
 	{
-		short	result = (short) (this.buffer [this.offset + inOffset] << 8);
-		result |= this.buffer [this.offset + inOffset + 1];
+		short	result = (short) (this.buffer [this.offset + inOffset] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset + 1] & 0xff);
 		return result;
 	}
 	
-	public long
-	getLong (int inOffset)
+	public int
+	getInteger (int inOffset)
 	{
-		long	result = this.buffer [this.offset + inOffset] << 8;
-		result |= this.buffer [this.offset + inOffset + 1];
-		result |= this.buffer [this.offset + inOffset + 2];
-		result |= this.buffer [this.offset + inOffset + 3];
+		int	result = (this.buffer [this.offset + inOffset] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset + 1] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset + 2] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset + 3] & 0xff);
 		return result;
 	}
 	
