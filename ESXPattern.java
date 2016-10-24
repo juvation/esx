@@ -23,11 +23,12 @@ extends BufferManager
 	public void
 	dump ()
 	{
+		System.err.println ("name = '" + getString (NAME_OFFSET, 8) + "'");
+
 		int	tempo = getShort (TEMPO_OFFSET);
 		int	integerTempo = (tempo >> 7) & 0x1ffff;
 		int	fractionTempo = tempo & 0xf;
 		
-		System.err.println ("name = '" + getString (NAME_OFFSET, 8) + "'");
 		System.err.println ("tempo = " + integerTempo + "." + fractionTempo);
 		System.err.println ("last step = " + getByte (LAST_STEP_OFFSET));
 		

@@ -19,6 +19,16 @@ extends BufferManager
 		{
 			this.patterns [i] = new ESXPattern (this.buffer, PATTERNS_OFFSET + (i * ESXPattern.BUFFER_SIZE));
 		}
+		
+		this.monoSampleHeaders = new ESXMonoSampleHeader [256];
+
+		for (int i = 0; i < 256; i++)
+		{
+			this.monoSampleHeaders [i] = new ESXMonoSampleHeader
+				(this.buffer, MONO_SAMPLE_HEADERS_OFFSET + (i * ESXMonoSampleHeader.BUFFER_SIZE));
+		}
+		
+		
 	}
 	
 	// PUBLIC METHODS
@@ -30,6 +40,7 @@ extends BufferManager
 		System.err.println ("number of stereo samples = " + getInteger (NUM_STEREO_SAMPLES_OFFSET));
 		
 		this.patterns [0].dump ();
+		this.monoSampleHeaders [0].dump ();
 	}
 	
 	// PRIVATE METHODS
@@ -38,6 +49,7 @@ extends BufferManager
 	checkBuffer ()
 	throws Exception
 	{
+		// we should do more, but do we care?
 		if (buffer [0] != (byte) 'K')
 			throw new Exception ("bad header");
 	}
@@ -72,6 +84,9 @@ extends BufferManager
 	
 	private ESXPattern
 	patterns [] = null;
+	
+	private ESXMonoSampleHeader
+	monoSampleHeaders [] = null;
 	
 }
 
