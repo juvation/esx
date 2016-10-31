@@ -222,7 +222,7 @@ extends BufferManager
 	public void
 	setName (String inName)
 	{
-		setString (NAME_OFFSET, inName, 8, (byte) 0);
+		setString (NAME_OFFSET, inName, 8, ' ');
 	}
 	
 	public void

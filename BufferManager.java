@@ -117,7 +117,7 @@ public class BufferManager
 	}
 	
 	public void
-	setString (int inOffset, String inString, int inMaxLength, byte inFill)
+	setString (int inOffset, String inString, int inMaxLength, char inFill)
 	{
 		// this isn't guaranteed to do the right thing for 8-bit ESX characters btw
 		byte[]	stringBytes = null;
@@ -139,7 +139,7 @@ public class BufferManager
 			}
 			else
 			{
-				this.buffer [this.offset + i] = inFill;
+				this.buffer [this.offset + i] = (byte) inFill;
 			}
 		}
 	}

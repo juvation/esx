@@ -205,6 +205,34 @@ STEREO_SAMPLE_HEADER (44 bytes)
 0x0000002a	00000001		reserved
 0x0000002b	00000001		reserved
 
+MONO_SAMPLE_DATA
+
+0x00000000	00000004		0x80007fff magic
+0x00000004	00000004		offset start
+0x00000008	00000004		offset end
+0x0000000c	00000001		sample number (0-255)
+0x0000000d	00000001		sample type (0=mono)
+0x0000000e	00000002		0xffff magic
+0x00000010				sample data
+		00000002		loop sample (?)
+
+STEREO_SAMPLE_DATA
+
+0x00000000	00000004		0x80007fff magic
+0x00000004	00000004		offset channel 1 start
+0x00000008	00000004		offset channel 1 end
+0x0000000c	00000001		sample number (0-127)
+0x0000000d	00000001		sample type (1=left)
+0x0000000e	00000002		0xffff magic
+0x00000010				sample data
+
+0x00000000	00000004		0x80007fff magic
+0x00000004	00000004		offset channel 2 start
+0x00000008	00000004		offset channel 2 end
+0x0000000c	00000001		sample number (0-127)
+0x0000000d	00000001		sample type (2=right)
+0x0000000e	00000002		0xffff magic
+0x00000010				sample data
 
 
 
