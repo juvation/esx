@@ -1,6 +1,7 @@
 // ESXStereoSample.java
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -166,18 +167,19 @@ extends BufferManager
 		
 		if (data1StartOffset >= 0)
 		{
+			System.err.print (inSampleNumber + ": ");
+			System.err.println ("'" + getString (NAME_OFFSET, 8) + "'");
+
 			int	data1EndOffset = getBigEndian32 (DATA_1_END_OFFSET);
+			System.err.println (" data 1 offset " + data1StartOffset + " to offset " + data1EndOffset);
 
 			int	data2StartOffset = getBigEndian32 (DATA_2_START_OFFSET);
 			int	data2EndOffset = getBigEndian32 (DATA_2_END_OFFSET);
+			System.err.println (" data 2 offset " + data2StartOffset + " to offset " + data2EndOffset);
 
-			System.err.println (inSampleNumber + ": " + getString (NAME_OFFSET, 8));
-			System.err.println ("left channel is (" + (data1EndOffset - data1StartOffset) + " bytes)");
-			System.err.println ("right channel is (" + (data2EndOffset - data2StartOffset) + " bytes)");
-		}
-		else
-		{
-			// System.err.println (inSampleNumber + ": NO SAMPLE");
+			int	sampleStartOffset = getBigEndian32 (SAMPLE_START_OFFSET);
+			int	sampleEndOffset = getBigEndian32 (SAMPLE_END_OFFSET);
+			System.err.println (" sample start " + sampleStartOffset + " end " + sampleEndOffset);
 		}
 	}
 	
@@ -229,12 +231,58 @@ extends BufferManager
 		setBigEndian32 (SAMPLE_RATE_OFFSET, inSampleRate);
 	}
 	
+	// well oops there's more than just the actual sample data
+	// even though it SOUNDS fine
 	public void
-	writeSampleData (OutputStream outStream)
+	writeSampleData (OutputStream outStream, int inSampleNumber)
 	throws Exception
 	{
-		outStream.write (this.data1, this.offset1, this.size);
-		outStream.write (this.data2, this.offset2, this.size);
+		DataOutputStream	dis = new DataOutputStream (outStream);
+		
+		// LEFT CHANNEL
+		
+		// magic number header
+		dis.writeInt (0x80007fff);
+		
+		// wtf
+		dis.writeInt (getBigEndian32 (DATA_1_START_OFFSET));
+		dis.writeInt (getBigEndian32 (DATA_1_END_OFFSET));
+		
+		// sample number
+		dis.writeByte ((byte) inSampleNumber);
+
+		// sample type = 1 = stereo left channel
+		dis.writeByte ((byte) 1);
+		
+		// maybe not this one
+		dis.writeShort (0xffff);
+		
+		// the actual byteage
+		dis.write (this.data1, this.offset1, this.size);
+		
+		// RIGHT CHANNEL
+		
+		// magic number header
+		dis.writeInt (0x80007fff);
+		
+		// wtf
+		dis.writeInt (getBigEndian32 (DATA_2_START_OFFSET));
+		dis.writeInt (getBigEndian32 (DATA_2_END_OFFSET));
+		
+		// sample number
+		dis.writeByte ((byte) inSampleNumber);
+		
+		// sample type = 2 = stereo right channel
+		dis.writeByte ((byte) 2);
+		
+		// maybe not this one
+		dis.writeShort (0xffff);
+		
+		// the actual byteage
+		dis.write (this.data2, this.offset2, this.size);
+	
+		// swoosh
+		dis.flush ();		
 	}
 	
 	// PUBLIC CONSTANTS

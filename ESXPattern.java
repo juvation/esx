@@ -42,6 +42,12 @@ extends BufferManager
 		this.drumParts [2].dump ();
 	}
 	
+	public ESXDrumPart
+	getDrumPart (int inIndex)
+	{
+		return this.drumParts [inIndex];
+	}
+	
 	// PUBLIC CONSTANTS
 	
 	public static final int

@@ -51,6 +51,12 @@ extends BufferManager
 		System.err.println ();
 	}
 	
+	public byte[]
+	getSequence ()
+	{
+		return getBytes (SEQUENCE_DATA_OFFSET, 16);
+	}
+	
 	// PUBLIC CONSTANTS
 	
 	public static final int

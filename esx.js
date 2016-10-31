@@ -7,3 +7,4 @@ var	ESX = electribe.esx1;
 var	buffer = fs.readFileSync ("user.esx");
 ESX.parse (buffer);
 
+console.log (ESX);

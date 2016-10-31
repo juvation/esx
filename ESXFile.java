@@ -72,8 +72,9 @@ extends BufferManager
 	{
 		System.err.println ("number of mono samples = " + getBigEndian32 (NUM_MONO_SAMPLES_OFFSET));
 		System.err.println ("number of stereo samples = " + getBigEndian32 (NUM_STEREO_SAMPLES_OFFSET));
+		System.err.println ("current sample offset = " + getBigEndian32 (CURRENT_SAMPLE_OFFSET_OFFSET));
 		
-		this.patterns [0].dump ();
+		// this.patterns [0].dump ();
 		
 		System.err.println ("mono samples...");
 		
@@ -96,6 +97,12 @@ extends BufferManager
 		return this.monoSamples [inIndex];
 	}
 
+	public ESXPattern
+	getPattern (int inIndex)
+	{
+		return this.patterns [inIndex];
+	}
+	
 	public ESXStereoSample
 	getStereoSample (int inIndex)
 	{
@@ -119,51 +126,104 @@ extends BufferManager
 			ESXMonoSample	sample = this.monoSamples [i];
 			
 			// if there *is* a sample here
-			int	dataStartOffset = sample.getDataStartOffset ();
-			
-			if (dataStartOffset >= 0)
+			// and for some reason empty sample slots are size 1!
+			if (sample.getSampleSize () > 1)
 			{
 				numMonoSamples++;
 				
-				int	nextSampleOffset = currentSampleOffset + sample.getSampleSize ();
-			
 				// note these MUST set the binary data in our buffer
 				// as we will write the whole lot at once
 				sample.setDataStartOffset (currentSampleOffset);
-				sample.setDataEndOffset (nextSampleOffset);
+
+				// the 18 byte extra is for the magic number header and other stuffs
+				// plus for mono samples, the loop start sample
+				currentSampleOffset += sample.getSampleSize () + 16;
+
+				sample.setDataEndOffset (currentSampleOffset);
 			
-				currentSampleOffset = nextSampleOffset;
+				// apparently we update the offset by blockAlign/loopStartSample
+				// this confuses me
+				
+				int	numSampleFrames = sample.getSampleSize () / 2;
+				
+				if ((numSampleFrames % 2) == 0)
+				{
+					currentSampleOffset += 4;
+				}
+				else
+				{
+					currentSampleOffset += 2;
+				}
+			}
+			else
+			{
+				sample.setDataStartOffset (0xFFFFFFFF);
+				sample.setDataEndOffset (0xFFFFFFFF);
 			}
 		}
 
+		// note that the header is 18 bytes for mono due to the loop start
+		// and 16 bytes for stereo due to no loop start
+		
 		// calculate stereo sample offsets
 		for (int i = 0; i < 128; i++)
 		{
 			ESXStereoSample	sample = this.stereoSamples [i];
 			
 			// if there *is* a sample here
-			int	dataStartOffset = sample.getData1StartOffset ();
-			
-			if (dataStartOffset >= 0)
+			// and for some reason empty sample slots are size 1!
+			if (sample.getSampleSize () > 1)
 			{
 				numStereoSamples++;
 				
-				int	nextSampleOffset = currentSampleOffset + sample.getSampleSize ();
-			
+				int	numSampleFrames = sample.getSampleSize () / 2;
+				
+				// LEFT CHANNEL
+				
 				// note these MUST set the binary data in our buffer
 				// as we will write the whole lot at once
 				sample.setData1StartOffset (currentSampleOffset);
-				sample.setData1EndOffset (nextSampleOffset);
 
-				currentSampleOffset = nextSampleOffset;
-				nextSampleOffset += sample.getSampleSize ();
-			
+				// the 16 byte extra is for the magic number header and other stuffs
+				currentSampleOffset += sample.getSampleSize () + 16;
+				sample.setData1EndOffset (currentSampleOffset);
+
+				// apparently we update the offset by blockAlign/loopStartSample
+				if ((numSampleFrames % 2) == 0)
+				{
+					currentSampleOffset += 4;
+				}
+				else
+				{
+					currentSampleOffset += 2;
+				}
+
+				// RIGHT CHANNEL
+							
 				// note these MUST set the binary data in our buffer
 				// as we will write the whole lot at once
 				sample.setData2StartOffset (currentSampleOffset);
-				sample.setData2EndOffset (nextSampleOffset);
-			
-				currentSampleOffset = nextSampleOffset;
+
+				// the 16 byte extra is for the magic number header and other stuffs
+				currentSampleOffset += sample.getSampleSize () + 16;
+				sample.setData2EndOffset (currentSampleOffset);
+
+				// apparently we update the offset by blockAlign/loopStartSample
+				if ((numSampleFrames % 2) == 0)
+				{
+					currentSampleOffset += 4;
+				}
+				else
+				{
+					currentSampleOffset += 2;
+				}
+			}
+			else
+			{
+				sample.setData1StartOffset (0xFFFFFFFF);
+				sample.setData1EndOffset (0xFFFFFFFF);
+				sample.setData2StartOffset (0xFFFFFFFF);
+				sample.setData2EndOffset (0xFFFFFFFF);
 			}
 		}
 
@@ -181,13 +241,29 @@ extends BufferManager
 			// now write the mono samples
 			for (int i = 0; i < 256; i++)
 			{
-				this.monoSamples [i].writeSampleData (fos);
+				ESXMonoSample	sample = this.monoSamples [i];
+				
+				// if there *is* a sample here
+				// and for some reason empty sample slots are size 1!
+				if (sample.getSampleSize () > 1)
+				{
+					System.err.println ("writing mono sample " + i + " of size " + sample.getSampleSize ());
+					sample.writeSampleData (fos, i);
+				}
 			}
 			
 			// now write the stereo samples
 			for (int i = 0; i < 128; i++)
 			{
-				this.stereoSamples [i].writeSampleData (fos);
+				ESXStereoSample	sample = this.stereoSamples [i];
+
+				// if there *is* a sample here
+				// and for some reason empty sample slots are size 1!
+				if (sample.getSampleSize () > 1)
+				{
+					System.err.println ("writing stereo sample " + i + " of size " + sample.getSampleSize ());
+					sample.writeSampleData (fos, i + 256);
+				}
 			}
 		}
 		finally

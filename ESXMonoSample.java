@@ -1,6 +1,7 @@
 // ESXMonoSample.java
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -84,10 +85,7 @@ extends BufferManager
 			this.offset = 0;
 			this.size = this.data.length;
 			
-			// weirdly we get the sample end 8 bytes too big
-			// so we hack...
 			int	numFrames = (this.size / 2);
-			numFrames -= 8;
 			
 			System.err.println ("copied buffer of length " + this.size);
 			System.err.println ("setting sample rate to " + sourceFormat.getSampleRate ());
@@ -138,16 +136,16 @@ extends BufferManager
 		
 		if (dataStartOffset >= 0)
 		{
-			int	dataEndOffset = getBigEndian32 (DATA_END_OFFSET);
-
-			System.err.print (inSampleNumber + ": ");
-			System.err.print (getString (NAME_OFFSET, 8));
-			System.err.print (" (" + (dataEndOffset - dataStartOffset) + " bytes)");
-			System.err.println ();
-		}
-		else
-		{
-			// System.err.println (inSampleNumber + ": NO SAMPLE");
+			System.err.println (inSampleNumber + ": ");
+			System.err.println ("  '" + getString (NAME_OFFSET, 8) + "'");
+			System.err.println (" data start offset " + getBigEndian32 (DATA_START_OFFSET));
+			System.err.println (" data end offset " + getBigEndian32 (DATA_END_OFFSET));
+			System.err.println (" sample start " + getBigEndian32 (SAMPLE_START_OFFSET));
+			System.err.println (" sample end " + getBigEndian32 (SAMPLE_END_OFFSET));
+			System.err.println (" loop end " + getBigEndian32 (LOOP_OFFSET));
+			System.err.println (" sample rate " + getBigEndian32 (SAMPLE_RATE_OFFSET));
+			System.err.println (" sample tune " + getBigEndian16 (SAMPLE_TUNE_OFFSET));
+			System.err.println (" sample level " + getByte (LEVEL_OFFSET));
 		}
 	}
 	
@@ -187,11 +185,40 @@ extends BufferManager
 		setBigEndian32 (SAMPLE_RATE_OFFSET, inSampleRate);
 	}
 	
+	// well oops there's more than just the actual sample data
+	// even though it SOUNDS fine
 	public void
-	writeSampleData (OutputStream outStream)
+	writeSampleData (OutputStream outStream, int inSampleNumber)
 	throws Exception
 	{
-		outStream.write (this.data, this.offset, this.size);
+		DataOutputStream	dis = new DataOutputStream (outStream);
+		
+		// magic number header
+		dis.writeInt (0x80007fff);
+		
+		// wtf
+		dis.writeInt (getBigEndian32 (DATA_START_OFFSET));
+		dis.writeInt (getBigEndian32 (DATA_END_OFFSET));
+
+		// sample number as byte		
+		dis.writeByte ((byte) (inSampleNumber & 0xff));
+
+		// sample type for some reason
+		// 0=mono
+		dis.writeByte ((byte) 0);
+				
+		// maybe not this one
+		dis.writeShort (0xffff);
+		
+		// the actual byteage
+		dis.write (this.data, this.offset, this.size);
+		
+		// only mono samples get a loop start marker
+		// this is fucked up IMHO
+		// we hack this for now
+		dis.writeShort (0);
+
+		dis.flush ();
 	}
 	
 	// PUBLIC CONSTANTS
