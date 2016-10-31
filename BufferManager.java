@@ -29,7 +29,7 @@ public class BufferManager
 	}
 	
 	public short
-	getShort (int inOffset)
+	getBigEndian16 (int inOffset)
 	{
 		short	result = (short) (this.buffer [this.offset + inOffset] & 0xff);
 		result <<= 8;
@@ -38,7 +38,7 @@ public class BufferManager
 	}
 	
 	public int
-	getInteger (int inOffset)
+	getBigEndian32 (int inOffset)
 	{
 		int	result = (this.buffer [this.offset + inOffset] & 0xff);
 		result <<= 8;
@@ -49,7 +49,43 @@ public class BufferManager
 		result |= (this.buffer [this.offset + inOffset + 3] & 0xff);
 		return result;
 	}
+
+	public short
+	getLittleEndian16 (int inOffset)
+	{
+		short	result = (short) (this.buffer [this.offset + inOffset + 1] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset] & 0xff);
+		return result;
+	}
 	
+	public int
+	getLittleEndian32 (int inOffset)
+	{
+		int	result = (this.buffer [this.offset + inOffset + 3] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset + 2] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset + 1] & 0xff);
+		result <<= 8;
+		result |= (this.buffer [this.offset + inOffset + 0] & 0xff);
+		return result;
+	}
+	
+	public String
+	getFourByteString (int inOffset)
+	throws Exception
+	{
+		byte[]	buffer = new byte [4];
+		
+		for (int i = 0; i < 4; i++)
+		{
+			buffer [i] = getByte (inOffset + i);
+		}
+		
+		return new String (buffer, 0, 4);
+	}
+
 	public String
 	getString (int inOffset, int inLength)
 	{
@@ -69,6 +105,43 @@ public class BufferManager
 		}
 		
 		return sb.toString ();
+	}
+	
+	public void
+	setBigEndian32 (int inOffset, int inValue)
+	{
+		this.buffer [this.offset + inOffset + 0] = (byte) ((inValue >> 24) & 0xff);
+		this.buffer [this.offset + inOffset + 1] = (byte) ((inValue >> 16) & 0xff);
+		this.buffer [this.offset + inOffset + 2] = (byte) ((inValue >> 8) & 0xff);
+		this.buffer [this.offset + inOffset + 3] = (byte) ((inValue >> 0) & 0xff);
+	}
+	
+	public void
+	setString (int inOffset, String inString, int inMaxLength, byte inFill)
+	{
+		// this isn't guaranteed to do the right thing for 8-bit ESX characters btw
+		byte[]	stringBytes = null;
+		
+		try
+		{
+			stringBytes = inString.getBytes ("UTF-8");
+		}
+		catch (Throwable inThrowable)
+		{
+			stringBytes = inString.getBytes ();
+		}
+		
+		for (int i = 0; i < inMaxLength; i++)
+		{
+			if (i < stringBytes.length)
+			{
+				this.buffer [this.offset + i] = stringBytes [i];
+			}
+			else
+			{
+				this.buffer [this.offset + i] = inFill;
+			}
+		}
 	}
 	
 	// PRIVATE DATA

@@ -25,7 +25,7 @@ extends BufferManager
 	{
 		System.err.println ("name = '" + getString (NAME_OFFSET, 8) + "'");
 
-		int	tempo = getShort (TEMPO_OFFSET);
+		int	tempo = getBigEndian16 (TEMPO_OFFSET);
 		int	integerTempo = (tempo >> 7) & 0x1ffff;
 		int	fractionTempo = tempo & 0xf;
 		

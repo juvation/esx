@@ -1,9 +1,7 @@
 
 import java.io.File;
-import java.io.FileInputStream;
 
 // POWER TOOL for reading and generating ESX files haha
-
 
 public class ESX
 {
@@ -11,31 +9,25 @@ public class ESX
 	main (String[] inArgs)
 	throws Exception
 	{
-		ESX	esx = new ESX (new File (inArgs [0]));
-	}
-	
-	public
-	ESX (File inFile)
-	throws Exception
-	{
-		System.err.println ("making buffer of size " + inFile.length ()
-			+ " (0x" + Long.toHexString (inFile.length ()) + ")");
+		ESXFile	file = ESXFile.fromFile (new File (inArgs [0]));
 		
-		byte[]	data = new byte [(int) inFile.length ()];
-		
-		FileInputStream	fis = new FileInputStream (inFile);
-		
-		try
-		{
-			fis.read (data);
+		file.getMonoSample (0).initFromFile (new File ("909/909_BD.wav"));
+		file.getMonoSample (0).setName ("909_BD");
 
-			ESXFile	file = new ESXFile (data);
-			file.dump ();
-		}
-		finally
-		{
-			fis.close ();
-		}
+		file.getMonoSample (1).initFromFile (new File ("909/909_SD.wav"));
+		file.getMonoSample (1).setName ("909_SD");
+
+		file.getMonoSample (2).initFromFile (new File ("909/909_CH.wav"));
+		file.getMonoSample (2).setName ("909_CH");
+
+		file.getMonoSample (3).initFromFile (new File ("909/909_OH.wav"));
+		file.getMonoSample (3).setName ("909_OH");
+
+		file.getStereoSample (3).initFromFile (new File ("stereo.wav"));
+		file.getStereoSample (3).setName ("STEREOPN");
+
+		File	newFile = new File ("out.esx");
+		file.write (newFile);
 	}
 	
 	// PRIVATE DATA

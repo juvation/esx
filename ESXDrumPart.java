@@ -17,12 +17,12 @@ extends BufferManager
 	public void
 	dump ()
 	{
-		short	samplePointer = getShort (SAMPLE_POINTER_OFFSET);
+		short	samplePointer = getBigEndian16 (SAMPLE_POINTER_OFFSET);
 
 		boolean	off = (samplePointer & 0x8000) != 0;
 		samplePointer &= 0x7fff;
 				
-		System.err.println ("sample pointer = " + getShort (SAMPLE_POINTER_OFFSET) + (off ? "off" : ""));
+		System.err.println ("sample pointer = " + getBigEndian16 (SAMPLE_POINTER_OFFSET) + (off ? "off" : ""));
 		System.err.println ("filter cutoff = " + getByte (FILTER_CUTOFF_OFFSET));
 		System.err.println ("filter resonance = " + getByte (FILTER_RESONANCE_OFFSET));
 		
