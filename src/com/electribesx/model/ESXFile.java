@@ -1,5 +1,7 @@
 // ESXFile.java
 
+package com.electribesx.model;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

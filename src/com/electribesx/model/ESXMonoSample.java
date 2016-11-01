@@ -1,5 +1,7 @@
 // ESXMonoSample.java
 
+package com.electribesx.model;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;

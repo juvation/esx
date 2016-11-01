@@ -1,3 +1,4 @@
+package com.electribesx.model;
 
 
 public class ESXPattern

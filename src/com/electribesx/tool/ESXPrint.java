@@ -1,10 +1,12 @@
+package com.electribesx.tool;
 
 import java.io.File;
+import com.electribesx.model.ESXFile;
 
 // calls dump() on the file
 // expecting helpful output
 
-public class ESXPrinter
+public class ESXPrint
 {
 	public static void
 	main (String[] inArgs)

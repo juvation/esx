@@ -1,7 +1,8 @@
 
+package com.electribesx.model;
+
 import java.io.File;
 import java.io.FileInputStream;
-
 
 public class ESXSample
 {
