@@ -14,6 +14,7 @@ import javax.sound.sampled.AudioSystem;
 
 public class ESXStereoSample
 extends BufferManager
+implements ESXSample
 {
 	// offset is into the buffer to the sample's metadata
 	public
