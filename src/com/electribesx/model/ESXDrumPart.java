@@ -58,6 +58,33 @@ extends BufferManager
 		return getBytes (SEQUENCE_DATA_OFFSET, 16);
 	}
 	
+	public void
+	setSampleNumber (int inSampleNumber)
+	{
+		setBigEndian16 (SAMPLE_POINTER_OFFSET, inSampleNumber);
+	}
+	
+	public void
+	setSequenceStep (int inStepNumber, boolean inValue)
+	{
+		int	byteNumber = inStepNumber / 8;
+		int	bitNumber = inStepNumber % 8;
+		int	mask = 1 << bitNumber;
+				
+		byte	sequenceByte = getByte (SEQUENCE_DATA_OFFSET + byteNumber);
+		
+		if (inValue)
+		{
+			sequenceByte |= mask;
+		}
+		else
+		{
+			sequenceByte &= ~mask;
+		}
+		
+		setByte (SEQUENCE_DATA_OFFSET + byteNumber, sequenceByte);
+	}
+	
 	// PUBLIC CONSTANTS
 	
 	public static final int

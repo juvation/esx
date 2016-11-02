@@ -1,0 +1,67 @@
+<project
+	name="Electribe SX Tools"
+	default="build"
+	basedir="."
+	>
+
+	<property name="build.dir"  value="build"/>
+	<property name="classes.dir"  value="${build.dir}/classes"/>
+	<property name="java.src.dir"  value="src"/>
+
+	<path
+		id="project.classpath"
+		>
+		<fileset dir="lib">
+				<include name="**/*.jar"/>
+				<include name="**/*.zip"/>
+		</fileset>
+		<pathelement
+			location="build/classes"
+		/>
+	</path>
+
+	<property
+		name="project.classpath.property"
+		refid="project.classpath"
+	/>
+	
+	<target
+		name="build"
+		depends="init,clean,compile"
+		>
+		<jar
+			destfile="electribesx.jar"
+			basedir="${classes.dir}"
+		/>
+	</target>
+	
+	<target name="init">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${classes.dir}"/>
+	</target>
+
+	<target
+		name="clean"
+		>
+		<delete dir="build/classes/hm"/>
+	</target>
+
+ 	<target
+		name="compile"
+		>
+		<javac
+			srcdir="${java.src.dir}"
+			destdir="${classes.dir}"
+			debug="on"
+			source="1.6"
+			target="1.6"
+			includeantruntime="false"
+			>
+ 			<classpath
+				refid="project.classpath"
+			/>
+		</javac>
+	</target>
+
+</project>
+

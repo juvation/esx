@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import com.electribesx.model.ESXDrumPart;
 import com.electribesx.model.ESXFile;
+import com.electribesx.model.ESXPattern;
 
 // POWER TOOL for reading and generating ESX files haha
 
@@ -34,6 +36,8 @@ public class ESXBuild
 			fis.close ();
 		}
 		
+		// MONO SAMPLES
+		
 		for (int i = 0; i < 256; i++)
 		{
 			String	key = "monosample." + i + ".file";
@@ -53,6 +57,8 @@ public class ESXBuild
 			}
 		}
 
+		// STEREO SAMPLES
+		
 		for (int i = 0; i < 128; i++)
 		{
 			String	key = "stereosample." + i + ".file";
@@ -72,8 +78,56 @@ public class ESXBuild
 			}
 		}
 		
+		// PATTERNS
 		
-
+		for (int i = 0; i < 256; i++)
+		{
+			boolean	found = false;
+			
+			for (int j = 0; j < 9; j++)
+			{
+				String	key = "pattern." + i + ".drumpart." + j + ".samplenumber";
+				String	value = properties.getProperty (key);
+			
+				if (value != null && value.length () > 0)
+				{
+					found = true;
+					
+					ESXPattern	pattern = file.getPattern (i);
+					ESXDrumPart	part = pattern.getDrumPart (j);
+					
+					part.setSampleNumber (Integer.parseInt (value));
+					
+					// see if there's a pattern... :-)
+					
+					key = "pattern." + i + ".drumpart." + j + ".pattern";
+					value = properties.getProperty (key);
+			
+					if (value != null && value.length () > 0)
+					{
+						for (int k = 0; k < value.length () && k < 64; k++)
+						{
+							char	ch = value.charAt (k);
+							
+							if (ch == '.')
+							{
+								part.setSequenceStep (k, false);
+							}
+							else
+							{
+								part.setSequenceStep (k, true);
+							}
+						}
+					}
+				}
+			}
+			
+			if (! found)
+			{
+				break;
+			}
+		}
+		
 /*
 		ESXPattern	pattern = file.getPattern (0);
 

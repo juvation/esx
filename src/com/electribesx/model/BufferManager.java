@@ -109,12 +109,25 @@ public class BufferManager
 	}
 	
 	public void
+	setBigEndian16 (int inOffset, int inValue)
+	{
+		this.buffer [this.offset + inOffset + 0] = (byte) ((inValue >> 8) & 0xff);
+		this.buffer [this.offset + inOffset + 1] = (byte) ((inValue >> 0) & 0xff);
+	}
+
+	public void
 	setBigEndian32 (int inOffset, int inValue)
 	{
 		this.buffer [this.offset + inOffset + 0] = (byte) ((inValue >> 24) & 0xff);
 		this.buffer [this.offset + inOffset + 1] = (byte) ((inValue >> 16) & 0xff);
 		this.buffer [this.offset + inOffset + 2] = (byte) ((inValue >> 8) & 0xff);
 		this.buffer [this.offset + inOffset + 3] = (byte) ((inValue >> 0) & 0xff);
+	}
+	
+	public void
+	setByte (int inOffset, byte inValue)
+	{
+		this.buffer [this.offset + inOffset] = inValue;
 	}
 	
 	public void
