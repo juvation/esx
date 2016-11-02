@@ -115,10 +115,7 @@ implements ESXSample
 
 			this.size = this.data1.length;
 
-			// weirdly we get the sample end 8 bytes too big
-			// so we hack...
 			int	numFrames = (this.size / 2);
-			numFrames -= 8;
 			
 			System.err.println ("left buffer is size " + this.data1.length);
 			System.err.println ("right buffer is size " + this.data2.length);
@@ -129,12 +126,7 @@ implements ESXSample
 			// set some config information from the sample itself
 			setBigEndian32 (SAMPLE_RATE_OFFSET, (int) sourceFormat.getSampleRate ());
 			setBigEndian32 (SAMPLE_START_OFFSET, 0);
-			setBigEndian32 (SAMPLE_END_OFFSET, numFrames - 1);
-			
-			// HACK ok now just in case we're replacing an empty sample slot
-			// overwrite the sample data start offset
-			// so the file writer knows this slot as a sample in it...
-			setData1StartOffset (0);
+			setBigEndian32 (SAMPLE_END_OFFSET, numFrames - 2);
 		}
 		finally
 		{

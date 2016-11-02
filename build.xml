@@ -43,7 +43,7 @@
 	<target
 		name="clean"
 		>
-		<delete dir="build/classes/hm"/>
+		<delete dir="build/classes/com"/>
 	</target>
 
  	<target

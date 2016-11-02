@@ -95,15 +95,11 @@ implements ESXSample
 			System.err.println ("setting sample end to " + (numFrames - 1));
 			
 			// copy some config information across
+			// note we use numFrames - 2 to avoid pops at the end of some samples (?)
 			setBigEndian32 (SAMPLE_RATE_OFFSET, (int) sourceFormat.getSampleRate ());
 			setBigEndian32 (SAMPLE_START_OFFSET, 0);
-			setBigEndian32 (SAMPLE_END_OFFSET, numFrames - 1);
-			setBigEndian32 (LOOP_OFFSET, numFrames - 1);
-
-			// HACK ok now just in case we're replacing an empty sample slot
-			// overwrite the sample data start offset
-			// so the file writer knows this slot as a sample in it...
-			setDataStartOffset (0);
+			setBigEndian32 (SAMPLE_END_OFFSET, numFrames - 2);
+			setBigEndian32 (LOOP_OFFSET, numFrames - 2);
 		}
 		finally
 		{
