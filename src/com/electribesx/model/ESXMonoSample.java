@@ -100,6 +100,11 @@ implements ESXSample
 			setBigEndian32 (SAMPLE_START_OFFSET, 0);
 			setBigEndian32 (SAMPLE_END_OFFSET, numFrames - 2);
 			setBigEndian32 (LOOP_OFFSET, numFrames - 2);
+			
+			// and default the name
+			String	name = inFile.getName ();
+			int	dotIndex = name.indexOf ('.');
+			setName (name.substring (0, dotIndex));
 		}
 		finally
 		{
@@ -232,10 +237,19 @@ implements ESXSample
 		// the actual byteage
 		dis.write (this.data, this.offset, this.size);
 		
-		// only mono samples get a loop start marker
-		// this is fucked up IMHO
-		// we hack this for now
-		dis.writeShort (0);
+		// so here we add the loop start sample and blockAlign
+		// i've no idea why this would be the case
+		
+		int	numSampleFrames = getSampleSize () / 2;
+		
+		if ((numSampleFrames % 2) == 0)
+		{
+			dis.writeInt (0);
+		}
+		else
+		{
+			dis.writeShort (0);
+		}
 
 		dis.flush ();
 	}

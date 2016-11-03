@@ -2,6 +2,7 @@
 
 package com.electribesx.model;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -93,6 +94,13 @@ extends BufferManager
 		}
 	}
 	
+	// largely only for the verifier
+	public byte[]
+	getBuffer ()
+	{
+		return this.buffer;
+	}
+	
 	public ESXMonoSample
 	getMonoSample (int inIndex)
 	{
@@ -159,8 +167,9 @@ extends BufferManager
 			}
 			else
 			{
+				// yes this is odd but this is how the machine sets it
 				sample.setDataStartOffset (0xFFFFFFFF);
-				sample.setDataEndOffset (0xFFFFFFFF);
+				sample.setDataEndOffset (0);
 			}
 		}
 
@@ -222,10 +231,11 @@ extends BufferManager
 			}
 			else
 			{
+				// yes this is odd but this is how the machine sets it
 				sample.setData1StartOffset (0xFFFFFFFF);
-				sample.setData1EndOffset (0xFFFFFFFF);
+				sample.setData1EndOffset (0);
 				sample.setData2StartOffset (0xFFFFFFFF);
-				sample.setData2EndOffset (0xFFFFFFFF);
+				sample.setData2EndOffset (0);
 			}
 		}
 
@@ -267,6 +277,18 @@ extends BufferManager
 					sample.writeSampleData (fos, i + 256);
 				}
 			}
+			
+			// and now write the secret shit at the end of the file!
+			// without which, the ESX will next boot in fucking recovery mode
+			// and wipe out all your good work
+			DataOutputStream	dis = new DataOutputStream (fos);
+			
+			dis.writeInt (0x80007fff);
+			dis.writeInt (currentSampleOffset);
+			dis.writeInt (0x017ffffe);
+			dis.writeInt (0x00ffffff);
+
+			dis.flush ();
 		}
 		finally
 		{

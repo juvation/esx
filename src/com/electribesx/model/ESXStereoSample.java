@@ -127,6 +127,11 @@ implements ESXSample
 			setBigEndian32 (SAMPLE_RATE_OFFSET, (int) sourceFormat.getSampleRate ());
 			setBigEndian32 (SAMPLE_START_OFFSET, 0);
 			setBigEndian32 (SAMPLE_END_OFFSET, numFrames - 2);
+			
+			// and default the name
+			String	name = inFile.getName ();
+			int	dotIndex = name.indexOf ('.');
+			setName (name.substring (0, dotIndex));
 		}
 		finally
 		{
@@ -182,6 +187,12 @@ implements ESXSample
 	getData1StartOffset ()
 	{
 		return getBigEndian32 (DATA_1_START_OFFSET);
+	}
+
+	public int
+	getData2StartOffset ()
+	{
+		return getBigEndian32 (DATA_2_START_OFFSET);
 	}
 	
 	public int
@@ -271,6 +282,19 @@ implements ESXSample
 		// the actual byteage
 		dis.write (this.data1, this.offset1, this.size);
 		
+		// so here we add the loop start sample and blockAlign
+		// i've no idea why this would be the case
+		int	numSampleFrames = getSampleSize () / 2;
+		
+		if ((numSampleFrames % 2) == 0)
+		{
+			dis.writeInt (0);
+		}
+		else
+		{
+			dis.writeShort (0);
+		}
+
 		// RIGHT CHANNEL
 		
 		// magic number header
@@ -292,6 +316,19 @@ implements ESXSample
 		// the actual byteage
 		dis.write (this.data2, this.offset2, this.size);
 	
+		// so here we add the loop start sample and blockAlign
+		// i've no idea why this would be the case
+		numSampleFrames = getSampleSize () / 2;
+		
+		if ((numSampleFrames % 2) == 0)
+		{
+			dis.writeInt (0);
+		}
+		else
+		{
+			dis.writeShort (0);
+		}
+
 		// swoosh
 		dis.flush ();		
 	}
