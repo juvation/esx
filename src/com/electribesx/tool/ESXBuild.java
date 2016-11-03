@@ -45,6 +45,7 @@ public class ESXBuild
 			
 			if (value != null && value.length () > 0)
 			{
+				System.out.println ("setting mono sample " + i + " to file " + value);
 				file.getMonoSample (i).initFromFile (new File (value));
 
 				key = "monosample." + i + ".name";
@@ -52,6 +53,7 @@ public class ESXBuild
 				
 				if (value != null && value.length () > 0)
 				{
+					System.out.println ("setting mono sample " + i + " name to " + value);
 					file.getMonoSample (i).setName (value);
 				}
 			}
@@ -66,6 +68,7 @@ public class ESXBuild
 			
 			if (value != null && value.length () > 0)
 			{
+				System.out.println ("setting stereo sample " + i + " to file " + value);
 				file.getStereoSample (i).initFromFile (new File (value));
 
 				key = "stereosample." + i + ".name";
@@ -73,6 +76,7 @@ public class ESXBuild
 				
 				if (value != null && value.length () > 0)
 				{
+					System.out.println ("setting stereo sample " + i + " name to " + value);
 					file.getStereoSample (i).setName (value);
 				}
 			}
@@ -82,21 +86,36 @@ public class ESXBuild
 		
 		for (int i = 0; i < 256; i++)
 		{
+			ESXPattern	pattern = file.getPattern (i);
+
 			boolean	found = false;
+			
+			String	key = "pattern." + i + ".name";
+			String	value = properties.getProperty (key);
+			
+			if (value != null && value.length () > 0)
+			{
+				System.out.println ("setting pattern " + i + " name to " + value);
+				pattern.setName (value);
+				found = true;
+			}
 			
 			for (int j = 0; j < 9; j++)
 			{
-				String	key = "pattern." + i + ".drumpart." + j + ".samplenumber";
-				String	value = properties.getProperty (key);
+				key = "pattern." + i + ".drumpart." + j + ".samplenumber";
+				value = properties.getProperty (key);
 			
 				if (value != null && value.length () > 0)
 				{
 					found = true;
 					
-					ESXPattern	pattern = file.getPattern (i);
 					ESXDrumPart	part = pattern.getDrumPart (j);
+					int	sampleNumber = Integer.parseInt (value);
 					
-					part.setSampleNumber (Integer.parseInt (value));
+					System.out.println ("setting pattern " + i + " part " + j + " to sample " + 
+						file.getSample (sampleNumber).getName ());
+
+					part.setSampleNumber (sampleNumber);
 					
 					// see if there's a pattern... :-)
 					

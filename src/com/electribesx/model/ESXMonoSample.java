@@ -40,7 +40,7 @@ implements ESXSample
 	initFromFile (File inFile)
 	throws Exception
 	{
-		System.out.println ("ESXMonoSample.initFromFile(" + inFile.getName () + ")");
+		// System.out.println ("ESXMonoSample.initFromFile(" + inFile.getName () + ")");
 		
 		AudioInputStream	sourceStream = AudioSystem.getAudioInputStream (inFile);
 		AudioInputStream	esxStream = null;
@@ -49,10 +49,12 @@ implements ESXSample
 		{
 			AudioFormat	sourceFormat = sourceStream.getFormat ();
 			
+			/*
 			System.out.println ("sample rate = " + sourceFormat.getSampleRate ());
 			System.out.println ("sample size = " + sourceFormat.getSampleSizeInBits ());
 			System.out.println ("sample channels = " + sourceFormat.getChannels ());
 			System.out.println ("big endian = " + sourceFormat.isBigEndian ());
+			*/
 			
 			// ESX requires 16-bit PCM signed big-endian
 			// note we convert to mono here too
@@ -90,9 +92,11 @@ implements ESXSample
 			
 			int	numFrames = (this.size / 2);
 			
+			/*
 			System.out.println ("copied buffer of length " + this.size);
 			System.out.println ("setting sample rate to " + sourceFormat.getSampleRate ());
 			System.out.println ("setting sample end to " + (numFrames - 1));
+			*/
 			
 			// copy some config information across
 			// note we use numFrames - 2 to avoid pops at the end of some samples (?)

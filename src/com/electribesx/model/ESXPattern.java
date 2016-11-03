@@ -49,6 +49,12 @@ extends BufferManager
 		return this.drumParts [inIndex];
 	}
 	
+	public void
+	setName (String inName)
+	{
+		setString (NAME_OFFSET, inName, 8, ' ');
+	}
+	
 	// PUBLIC CONSTANTS
 	
 	public static final int

@@ -17,6 +17,9 @@ public interface ESXSample
 	public void
 	dump (int inSampleNumber);
 
+	public String
+	getName ();
+	
 	public int
 	getSample (int inSampleNumber);
 		

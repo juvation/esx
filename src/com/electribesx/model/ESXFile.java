@@ -113,6 +113,23 @@ extends BufferManager
 		return this.patterns [inIndex];
 	}
 	
+	public ESXSample
+	getSample (int inIndex)
+	{
+		ESXSample	sample = null;
+		
+		if (inIndex < 256)
+		{
+			sample = getMonoSample (inIndex);
+		}
+		else
+		{
+			sample = getStereoSample (inIndex - 256);
+		}
+		
+		return sample;
+	}
+	
 	public ESXStereoSample
 	getStereoSample (int inIndex)
 	{
@@ -259,7 +276,7 @@ extends BufferManager
 				// and for some reason empty sample slots are size 1!
 				if (sample.getSampleSize () > 1)
 				{
-					System.out.println ("writing mono sample " + i + " of size " + sample.getSampleSize ());
+					// System.out.println ("writing mono sample " + i + " of size " + sample.getSampleSize ());
 					sample.writeSampleData (fos, i);
 				}
 			}
@@ -273,7 +290,7 @@ extends BufferManager
 				// and for some reason empty sample slots are size 1!
 				if (sample.getSampleSize () > 1)
 				{
-					System.out.println ("writing stereo sample " + i + " of size " + sample.getSampleSize ());
+					// System.out.println ("writing stereo sample " + i + " of size " + sample.getSampleSize ());
 					sample.writeSampleData (fos, i + 256);
 				}
 			}

@@ -49,7 +49,7 @@ implements ESXSample
 	initFromFile (File inFile)
 	throws Exception
 	{
-		System.err.println ("ESXStereoSample.initFromFile(" + inFile.getName () + ")");
+		// System.err.println ("ESXStereoSample.initFromFile(" + inFile.getName () + ")");
 		
 		AudioInputStream	sourceStream = AudioSystem.getAudioInputStream (inFile);
 		AudioInputStream	esxStream = null;
@@ -58,10 +58,12 @@ implements ESXSample
 		{
 			AudioFormat	sourceFormat = sourceStream.getFormat ();
 			
+			/*
 			System.err.println ("sample rate = " + sourceFormat.getSampleRate ());
 			System.err.println ("sample size = " + sourceFormat.getSampleSizeInBits ());
 			System.err.println ("sample channels = " + sourceFormat.getChannels ());
 			System.err.println ("big endian = " + sourceFormat.isBigEndian ());
+			*/
 			
 			// ESX requires 16-bit PCM signed big-endian
 			// note we convert to stereo here too
@@ -117,11 +119,13 @@ implements ESXSample
 
 			int	numFrames = (this.size / 2);
 			
+			/*
 			System.err.println ("left buffer is size " + this.data1.length);
 			System.err.println ("right buffer is size " + this.data2.length);
 						
 			System.err.println ("setting sample rate to " + sourceFormat.getSampleRate ());
 			System.err.println ("setting sample end to " + (numFrames - 1));
+			*/
 			
 			// set some config information from the sample itself
 			setBigEndian32 (SAMPLE_RATE_OFFSET, (int) sourceFormat.getSampleRate ());
