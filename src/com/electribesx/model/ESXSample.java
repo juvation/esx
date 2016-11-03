@@ -1,6 +1,7 @@
 // ESXSample.java
 
 // interface shared by mono and stereo samples, fwiw
+// the whole mono/stereo thing is broken and should be fixed
 
 package com.electribesx.model;
 
@@ -20,9 +21,6 @@ public interface ESXSample
 	public String
 	getName ();
 	
-	public int
-	getSample (int inSampleNumber);
-		
 	public int
 	getSampleSize ();
 

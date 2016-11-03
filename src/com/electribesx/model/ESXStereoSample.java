@@ -206,21 +206,29 @@ implements ESXSample
 	}
 	
 	public int
-	getSample (int inSampleNumber)
+	getSample1 (int inSampleNumber)
 	{
-		int	sample = 0;
+		byte	msb = this.data1 [this.offset1 + (inSampleNumber * 2)];
+		byte	lsb = this.data1 [this.offset1 + (inSampleNumber * 2) + 1];
 		
-		sample = (this.data2 [this.offset2 + (inSampleNumber * 2) + 1]) & 0xff;
-		sample <<= 8;
-		sample |= (this.data2 [this.offset2 + (inSampleNumber * 2)]) & 0xff;
-		sample <<= 8;
-		sample |= (this.data1 [this.offset1 + (inSampleNumber * 2) + 1]) & 0xff;
-		sample <<= 8;
-		sample |= (this.data1 [this.offset1 + (inSampleNumber * 2)]) & 0xff;
-		
-		return sample;
+		return (msb << 8) | (lsb & 0xff);
 	}
 	
+	public int
+	getSample2 (int inSampleNumber)
+	{
+		byte	msb = this.data2 [this.offset2 + (inSampleNumber * 2)];
+		byte	lsb = this.data2 [this.offset2 + (inSampleNumber * 2) + 1];
+		
+		return (msb << 8) | (lsb & 0xff);
+	}
+
+	public int
+	getSampleRate ()
+	{
+		return getBigEndian32 (SAMPLE_RATE_OFFSET);
+	}
+
 	public int
 	getSampleSize ()
 	{
