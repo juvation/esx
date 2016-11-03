@@ -2,7 +2,7 @@ package com.electribesx.tool;
 
 import java.io.*;
 
-public class WavPrinter
+public class WavPrint
 {
 	public static void
 	main (String[] inArgs)
@@ -10,7 +10,7 @@ public class WavPrinter
 	{
 		if (inArgs.length == 0)
 		{
-			System.err.println ("usage: java WavPrinter wavfile");
+			System.err.println ("usage: java WavPrint wavfile");
 			System.exit (1);
 		}
 		

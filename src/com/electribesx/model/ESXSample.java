@@ -16,7 +16,10 @@ public interface ESXSample
 	
 	public void
 	dump (int inSampleNumber);
-	
+
+	public int
+	getSample (int inSampleNumber);
+		
 	public int
 	getSampleSize ();
 

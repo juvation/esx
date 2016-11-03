@@ -22,7 +22,7 @@ implements ESXSample
 	{
 		super (inBuffer, inOffset);
 		
-		// System.err.println ("ESXMonoSample (" + inOffset + ") (0x" + Integer.toHexString (inOffset) + ")");
+		// System.out.println ("ESXMonoSample (" + inOffset + ") (0x" + Integer.toHexString (inOffset) + ")");
 		
 		// note these are offsets from the start of the sample area @0x250000
 		int	dataStartOffset = getBigEndian32 (DATA_START_OFFSET);
@@ -40,7 +40,7 @@ implements ESXSample
 	initFromFile (File inFile)
 	throws Exception
 	{
-		System.err.println ("ESXMonoSample.initFromFile(" + inFile.getName () + ")");
+		System.out.println ("ESXMonoSample.initFromFile(" + inFile.getName () + ")");
 		
 		AudioInputStream	sourceStream = AudioSystem.getAudioInputStream (inFile);
 		AudioInputStream	esxStream = null;
@@ -49,10 +49,10 @@ implements ESXSample
 		{
 			AudioFormat	sourceFormat = sourceStream.getFormat ();
 			
-			System.err.println ("sample rate = " + sourceFormat.getSampleRate ());
-			System.err.println ("sample size = " + sourceFormat.getSampleSizeInBits ());
-			System.err.println ("sample channels = " + sourceFormat.getChannels ());
-			System.err.println ("big endian = " + sourceFormat.isBigEndian ());
+			System.out.println ("sample rate = " + sourceFormat.getSampleRate ());
+			System.out.println ("sample size = " + sourceFormat.getSampleSizeInBits ());
+			System.out.println ("sample channels = " + sourceFormat.getChannels ());
+			System.out.println ("big endian = " + sourceFormat.isBigEndian ());
 			
 			// ESX requires 16-bit PCM signed big-endian
 			// note we convert to mono here too
@@ -90,9 +90,9 @@ implements ESXSample
 			
 			int	numFrames = (this.size / 2);
 			
-			System.err.println ("copied buffer of length " + this.size);
-			System.err.println ("setting sample rate to " + sourceFormat.getSampleRate ());
-			System.err.println ("setting sample end to " + (numFrames - 1));
+			System.out.println ("copied buffer of length " + this.size);
+			System.out.println ("setting sample rate to " + sourceFormat.getSampleRate ());
+			System.out.println ("setting sample end to " + (numFrames - 1));
 			
 			// copy some config information across
 			// note we use numFrames - 2 to avoid pops at the end of some samples (?)
@@ -121,7 +121,7 @@ implements ESXSample
 			}
 			catch (Throwable inThrowable)
 			{
-				System.err.println ("error closing source stream");
+				System.out.println ("error closing source stream");
 			}
 		}
 	}
@@ -135,16 +135,15 @@ implements ESXSample
 		
 		if (dataStartOffset >= 0)
 		{
-			System.err.println (inSampleNumber + ": ");
-			System.err.println ("  '" + getString (NAME_OFFSET, 8) + "'");
-			System.err.println (" data start offset " + getBigEndian32 (DATA_START_OFFSET));
-			System.err.println (" data end offset " + getBigEndian32 (DATA_END_OFFSET));
-			System.err.println (" sample start " + getBigEndian32 (SAMPLE_START_OFFSET));
-			System.err.println (" sample end " + getBigEndian32 (SAMPLE_END_OFFSET));
-			System.err.println (" loop end " + getBigEndian32 (LOOP_OFFSET));
-			System.err.println (" sample rate " + getBigEndian32 (SAMPLE_RATE_OFFSET));
-			System.err.println (" sample tune " + getBigEndian16 (SAMPLE_TUNE_OFFSET));
-			System.err.println (" sample level " + getByte (LEVEL_OFFSET));
+			System.out.println (inSampleNumber + ": '" + getString (NAME_OFFSET, 8) + "'");
+			System.out.println (" data start offset " + getBigEndian32 (DATA_START_OFFSET));
+			System.out.println (" data end offset " + getBigEndian32 (DATA_END_OFFSET));
+			System.out.println (" sample start " + getBigEndian32 (SAMPLE_START_OFFSET));
+			System.out.println (" sample end " + getBigEndian32 (SAMPLE_END_OFFSET));
+			System.out.println (" loop end " + getBigEndian32 (LOOP_OFFSET));
+			System.out.println (" sample rate " + getBigEndian32 (SAMPLE_RATE_OFFSET));
+			System.out.println (" sample tune " + getBigEndian16 (SAMPLE_TUNE_OFFSET));
+			System.out.println (" sample level " + getByte (LEVEL_OFFSET));
 		}
 	}
 	
@@ -154,6 +153,27 @@ implements ESXSample
 		return getBigEndian32 (DATA_START_OFFSET);
 	}
 
+	public String
+	getName ()
+	{
+		return getString (NAME_OFFSET, 8);
+	}
+	
+	public int
+	getSample (int inSampleNumber)
+	{
+		byte	msb = this.data [this.offset + (inSampleNumber * 2)];
+		byte	lsb = this.data [this.offset + (inSampleNumber * 2) + 1];
+		
+		return (msb << 8) | (lsb & 0xff);
+	}
+	
+	public int
+	getSampleRate ()
+	{
+		return getBigEndian32 (SAMPLE_RATE_OFFSET);
+	}
+	
 	public int
 	getSampleSize ()
 	{

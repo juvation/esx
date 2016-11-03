@@ -9,7 +9,7 @@ extends BufferManager
 	{
 		super (inBuffer, inOffset);
 		
-		// System.err.println ("ESXDrumPart (" + inOffset + ") (0x" + Integer.toHexString (inOffset) + ")");
+		// System.out.println ("ESXDrumPart (" + inOffset + ") (0x" + Integer.toHexString (inOffset) + ")");
 		
 	}
 
@@ -23,11 +23,11 @@ extends BufferManager
 		boolean	off = (samplePointer & 0x8000) != 0;
 		samplePointer &= 0x7fff;
 				
-		System.err.println ("sample pointer = " + getBigEndian16 (SAMPLE_POINTER_OFFSET) + (off ? "off" : ""));
-		System.err.println ("filter cutoff = " + getByte (FILTER_CUTOFF_OFFSET));
-		System.err.println ("filter resonance = " + getByte (FILTER_RESONANCE_OFFSET));
+		System.out.println ("sample pointer = " + getBigEndian16 (SAMPLE_POINTER_OFFSET) + (off ? "off" : ""));
+		System.out.println ("filter cutoff = " + getByte (FILTER_CUTOFF_OFFSET));
+		System.out.println ("filter resonance = " + getByte (FILTER_RESONANCE_OFFSET));
 		
-		System.err.print ("sequence = ");
+		System.out.print ("sequence = ");
 		
 		byte[]	sequence = getBytes (SEQUENCE_DATA_OFFSET, 16);
 		
@@ -40,16 +40,16 @@ extends BufferManager
 				
 				if ((sequence [i] & mask) == 0)
 				{
-					System.err.print (".");
+					System.out.print (".");
 				}
 				else
 				{
-					System.err.print ("X");
+					System.out.print ("X");
 				}
 			}
 		}
 		
-		System.err.println ();
+		System.out.println ();
 	}
 	
 	public byte[]

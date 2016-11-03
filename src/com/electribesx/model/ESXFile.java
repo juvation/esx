@@ -72,20 +72,20 @@ extends BufferManager
 	public void
 	dump ()
 	{
-		System.err.println ("number of mono samples = " + getBigEndian32 (NUM_MONO_SAMPLES_OFFSET));
-		System.err.println ("number of stereo samples = " + getBigEndian32 (NUM_STEREO_SAMPLES_OFFSET));
-		System.err.println ("current sample offset = " + getBigEndian32 (CURRENT_SAMPLE_OFFSET_OFFSET));
+		System.out.println ("number of mono samples = " + getBigEndian32 (NUM_MONO_SAMPLES_OFFSET));
+		System.out.println ("number of stereo samples = " + getBigEndian32 (NUM_STEREO_SAMPLES_OFFSET));
+		System.out.println ("current sample offset = " + getBigEndian32 (CURRENT_SAMPLE_OFFSET_OFFSET));
 		
 		// this.patterns [0].dump ();
 		
-		System.err.println ("mono samples...");
+		System.out.println ("mono samples...");
 		
 		for (int i = 0; i < 256; i++)
 		{
 			this.monoSamples [i].dump (i);
 		}
 
-		System.err.println ("stereo samples...");
+		System.out.println ("stereo samples...");
 		
 		for (int i = 0; i < 128; i++)
 		{
@@ -249,7 +249,7 @@ extends BufferManager
 				// and for some reason empty sample slots are size 1!
 				if (sample.getSampleSize () > 1)
 				{
-					System.err.println ("writing mono sample " + i + " of size " + sample.getSampleSize ());
+					System.out.println ("writing mono sample " + i + " of size " + sample.getSampleSize ());
 					sample.writeSampleData (fos, i);
 				}
 			}
@@ -263,7 +263,7 @@ extends BufferManager
 				// and for some reason empty sample slots are size 1!
 				if (sample.getSampleSize () > 1)
 				{
-					System.err.println ("writing stereo sample " + i + " of size " + sample.getSampleSize ());
+					System.out.println ("writing stereo sample " + i + " of size " + sample.getSampleSize ());
 					sample.writeSampleData (fos, i + 256);
 				}
 			}

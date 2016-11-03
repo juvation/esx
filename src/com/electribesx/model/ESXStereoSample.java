@@ -185,6 +185,22 @@ implements ESXSample
 	}
 	
 	public int
+	getSample (int inSampleNumber)
+	{
+		int	sample = 0;
+		
+		sample = (this.data2 [this.offset2 + (inSampleNumber * 2) + 1]) & 0xff;
+		sample <<= 8;
+		sample |= (this.data2 [this.offset2 + (inSampleNumber * 2)]) & 0xff;
+		sample <<= 8;
+		sample |= (this.data1 [this.offset1 + (inSampleNumber * 2) + 1]) & 0xff;
+		sample <<= 8;
+		sample |= (this.data1 [this.offset1 + (inSampleNumber * 2)]) & 0xff;
+		
+		return sample;
+	}
+	
+	public int
 	getSampleSize ()
 	{
 		return this.size;

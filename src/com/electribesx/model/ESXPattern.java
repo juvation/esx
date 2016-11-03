@@ -9,7 +9,7 @@ extends BufferManager
 	{
 		super (inBuffer, inOffset);
 		
-		// System.err.println ("ESXPattern (" + inOffset + ") (0x" + Integer.toHexString (inOffset) + ")");
+		// System.out.println ("ESXPattern (" + inOffset + ") (0x" + Integer.toHexString (inOffset) + ")");
 		
 		this.drumParts = new ESXDrumPart [9];
 		
@@ -24,22 +24,22 @@ extends BufferManager
 	public void
 	dump ()
 	{
-		System.err.println ("name = '" + getString (NAME_OFFSET, 8) + "'");
+		System.out.println ("name = '" + getString (NAME_OFFSET, 8) + "'");
 
 		int	tempo = getBigEndian16 (TEMPO_OFFSET);
 		int	integerTempo = (tempo >> 7) & 0x1ffff;
 		int	fractionTempo = tempo & 0xf;
 		
-		System.err.println ("tempo = " + integerTempo + "." + fractionTempo);
-		System.err.println ("last step = " + getByte (LAST_STEP_OFFSET));
+		System.out.println ("tempo = " + integerTempo + "." + fractionTempo);
+		System.out.println ("last step = " + getByte (LAST_STEP_OFFSET));
 		
-		System.err.println ("drum part 0");
+		System.out.println ("drum part 0");
 		this.drumParts [0].dump ();
 
-		System.err.println ("drum part 1");
+		System.out.println ("drum part 1");
 		this.drumParts [1].dump ();
 
-		System.err.println ("drum part 2");
+		System.out.println ("drum part 2");
 		this.drumParts [2].dump ();
 	}
 	
