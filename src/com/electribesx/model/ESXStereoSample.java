@@ -195,6 +195,12 @@ implements ESXSample
 		return getBigEndian32 (DATA_2_START_OFFSET);
 	}
 	
+	public String
+	getName ()
+	{
+		return getString (NAME_OFFSET, 8);
+	}
+	
 	public int
 	getSample (int inSampleNumber)
 	{

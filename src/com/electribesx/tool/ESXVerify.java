@@ -24,7 +24,7 @@ public class ESXVerify
 			
 			if (sampleDataStartOffset >= 0)
 			{
-				System.out.println ("checking mono sample " + i);
+				System.out.println ("checking mono sample " + i + " " + sample.getName ());
 
 				int	offset = 0x250000 + sampleDataStartOffset;
 			
@@ -63,7 +63,7 @@ public class ESXVerify
 			
 			if (sampleData1StartOffset >= 0)
 			{
-				System.out.println ("checking stereo sample " + i);
+				System.out.println ("checking stereo sample " + i + " " + sample.getName ());
 
 				int	offset = 0x250000 + sampleData1StartOffset;
 			
