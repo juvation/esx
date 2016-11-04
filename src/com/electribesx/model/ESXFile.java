@@ -136,6 +136,115 @@ extends BufferManager
 		return this.stereoSamples [inIndex];
 	}
 	
+	// note this will ONLY work on a freshly loaded ESXFile
+	// as it will have everything properly serialised in the ESXFile buffer
+	public void
+	verify ()
+	throws Exception
+	{
+		// verify that the mono samples start where they should
+		for (int i = 0; i < 256; i++)
+		{
+			ESXMonoSample	sample = getMonoSample (i);
+			
+			int	sampleDataStartOffset = sample.getDataStartOffset ();
+			
+			if (sampleDataStartOffset >= 0)
+			{
+				System.out.println ("checking mono sample " + i + " " + sample.getName ());
+
+				int	offset = 0x250000 + sampleDataStartOffset;
+			
+				int	magic = 0;
+			
+				for (int j = 0; j < 4; j++)
+				{
+					magic <<= 8;
+					magic |= (this.buffer [offset + j] & 0xff);
+				}
+			
+				if (magic != 0x80007fff)
+				{
+					// print some context
+					for (int j = -4; j < 4; j++)
+					{
+						System.out.println ("byte at offset " + j + " = " + Integer.toHexString ((this.buffer [offset + j]) & 0xff));
+					}
+
+					throw new Exception ("magic number mismatch for mono sample " + i);
+				}
+			}
+			else
+			{
+				// System.out.println ("no sample in slot " + i);
+			}
+		}
+
+		// verify that the stereo samples start where they should
+		for (int i = 0; i < 128; i++)
+		{
+			ESXStereoSample	sample = getStereoSample (i);
+			
+			int	sampleData1StartOffset = sample.getData1StartOffset ();
+			
+			if (sampleData1StartOffset >= 0)
+			{
+				System.out.println ("checking stereo sample " + i + " " + sample.getName ());
+
+				int	offset = 0x250000 + sampleData1StartOffset;
+			
+				int	magic = 0;
+			
+				for (int j = 0; j < 4; j++)
+				{
+					magic <<= 8;
+					magic |= (buffer [offset + j] & 0xff);
+				}
+			
+				if (magic != 0x80007fff)
+				{
+					// print some context
+					for (int j = -4; j < 4; j++)
+					{
+						System.out.println ("byte at offset " + j + " = " + Integer.toHexString ((buffer [offset + j]) & 0xff));
+					}
+
+					throw new Exception ("magic number mismatch for left stereo sample " + i);
+				}
+	
+				int	sampleData2StartOffset = sample.getData2StartOffset ();
+			
+				if (sampleData2StartOffset >= 0)
+				{
+					offset = 0x250000 + sampleData2StartOffset;
+			
+					magic = 0;
+			
+					for (int j = 0; j < 4; j++)
+					{
+						magic <<= 8;
+						magic |= (buffer [offset + j] & 0xff);
+					}
+			
+					if (magic != 0x80007fff)
+					{
+						// print some context
+						for (int j = -4; j < 4; j++)
+						{
+							System.out.println ("byte at offset " + j + " = " + Integer.toHexString ((buffer [offset + j]) & 0xff));
+						}
+
+						throw new Exception ("magic number mismatch for right stereo sample " + i);
+					}
+				}
+			}
+			else
+			{
+				// System.out.println ("no sample in slot " + i);
+			}
+		}
+	}
+	
 	public void
 	write (File outFile)
 	throws Exception

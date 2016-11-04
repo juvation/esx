@@ -1,0 +1,15 @@
+
+DONE
+
+mono wav import
+stereo wav import
+part/sample assignment
+pattern set/clear step
+mono wav export
+verifier
+stereo wav export
+
+TODO
+
+support for tuning and other smpl chunk features back and forth
+

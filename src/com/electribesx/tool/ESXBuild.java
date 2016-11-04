@@ -147,31 +147,12 @@ public class ESXBuild
 			}
 		}
 		
-/*
-		ESXPattern	pattern = file.getPattern (0);
-
-		// kick pattern
-		ESXDrumPart	part = pattern.getDrumPart (0);
-		byte[]	sequence = part.getSequence ();
-		
-		sequence [0] = 0;
-		sequence [1] = 0;
-		sequence [2] = 0;
-		sequence [3] = 0;
-		
-		sequence [0] = (1 << 0) | (1 << 4);
-		sequence [1] = (1 << 0) | (1 << 4);
-
-		// hh pattern
-		part = pattern.getDrumPart (7);
-		sequence = part.getSequence ();
-
-		sequence [0] = 0xff;
-		sequence [1] = 0xff;
-*/
-		
 		File	newFile = new File ("out.esx");
 		file.write (newFile);
+		
+		// verify only works on a freshly loaded file
+		file = ESXFile.fromFile (newFile);
+		file.verify ();
 	}
 	
 	// PRIVATE DATA
