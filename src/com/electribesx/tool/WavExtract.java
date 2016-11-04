@@ -25,22 +25,58 @@ public class WavExtract
 	{
 		if (inArgs.length < 2)
 		{
-			System.err.println ("usage: java WavExtract esxfile samplenumber (0-383)");
+			System.err.println ("usage: java WavExtract esxfile startsample-endsample (0-383)");
 			System.exit (1);
 		}
 		
 		ESXFile	file = ESXFile.fromFile (new File (inArgs [0]));
-		int	sampleNumber = Integer.parseInt (inArgs [1]);
 		
-		if (sampleNumber >= 0 && sampleNumber < 256)
+		String	sampleString = inArgs [1];
+		int	hyphenIndex = sampleString.indexOf ('-');
+		
+		if (hyphenIndex > 0)
 		{
-			extractMonoSample (file, sampleNumber);
+			int	startSample = Integer.parseInt (sampleString.substring (0, hyphenIndex));
+			
+			if (hyphenIndex < (sampleString.length () - 1))
+			{
+				int	endSample = Integer.parseInt (sampleString.substring (hyphenIndex + 1));
+				
+				for (int i = startSample; i <= endSample; i++)
+				{
+					extractSample (file, i);
+				}
+			}
+			else
+			{
+				extractSample (file, startSample);
+			}
 		}
 		else
 		{
-			extractStereoSample (file, sampleNumber - 256);
+			int	sampleNumber = Integer.parseInt (inArgs [1]);
+			extractSample (file, sampleNumber);
 		}
 		
+	}
+	
+	private static void
+	extractSample (ESXFile inFile, int inSampleNumber)
+	throws Exception
+	{
+		if (inSampleNumber >= 0 && inSampleNumber < 256)
+		{
+			extractMonoSample (inFile, inSampleNumber);
+		}
+		else
+		if (inSampleNumber < 384)
+		{
+			extractStereoSample (inFile, inSampleNumber - 256);
+		}
+		else
+		{
+			throw new Exception ("illegal sample number " + inSampleNumber);
+		}
 	}
 	
 	private static void
@@ -49,6 +85,15 @@ public class WavExtract
 	{
 		ESXMonoSample	sample = inFile.getMonoSample (inSampleNumber);
 
+		if (sample.getDataStartOffset () < 0)
+		{
+			// this isn't fatal
+			return;
+		}
+		
+		System.out.println
+			("extracting mono sample " + inSampleNumber + " (" + sample.getName () + ")");
+		
 		ByteArrayOutputStream	bos = new ByteArrayOutputStream ();
 		write4ByteLiteral (bos, "RIFF");
 		
@@ -135,6 +180,15 @@ public class WavExtract
 	{
 		ESXStereoSample	sample = inFile.getStereoSample (inSampleNumber);
 
+		if (sample.getData1StartOffset () < 0)
+		{
+			// this isn't fatal
+			return;
+		}
+		
+		System.out.println
+			("extracting stereo sample " + inSampleNumber + " (" + sample.getName () + ")");
+		
 		ByteArrayOutputStream	bos = new ByteArrayOutputStream ();
 		write4ByteLiteral (bos, "RIFF");
 		
