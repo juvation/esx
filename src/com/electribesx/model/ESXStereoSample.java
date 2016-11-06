@@ -171,9 +171,9 @@ implements ESXSample
 		
 		if (data1StartOffset >= 0)
 		{
-			System.err.print (inSampleNumber + ": ");
-			System.err.println ("'" + getString (NAME_OFFSET, 8) + "'");
+			System.err.print (inSampleNumber + ": " + getString (NAME_OFFSET, 8) + "'");
 
+			/*
 			int	data1EndOffset = getBigEndian32 (DATA_1_END_OFFSET);
 			System.err.println (" data 1 offset " + data1StartOffset + " to offset " + data1EndOffset);
 
@@ -184,6 +184,7 @@ implements ESXSample
 			int	sampleStartOffset = getBigEndian32 (SAMPLE_START_OFFSET);
 			int	sampleEndOffset = getBigEndian32 (SAMPLE_END_OFFSET);
 			System.err.println (" sample start " + sampleStartOffset + " end " + sampleEndOffset);
+			*/
 		}
 	}
 	
