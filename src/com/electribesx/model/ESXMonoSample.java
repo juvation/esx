@@ -103,7 +103,19 @@ implements ESXSample
 			setBigEndian32 (SAMPLE_RATE_OFFSET, (int) sourceFormat.getSampleRate ());
 			setBigEndian32 (SAMPLE_START_OFFSET, 0);
 			setBigEndian32 (SAMPLE_END_OFFSET, numFrames - 2);
-			setBigEndian32 (LOOP_OFFSET, numFrames - 2);
+
+			// right now read the fucking file again to determine metadata
+			// quite why AudioFormat etc won't give you this...
+			WavFile	wavFile = new WavFile (inFile, false);
+			
+			if (wavFile.getNumLoops () > 0)
+			{
+				setBigEndian32 (LOOP_OFFSET, wavFile.getLoopStart ());
+			}
+			else
+			{
+				setBigEndian32 (LOOP_OFFSET, numFrames - 2);
+			}
 			
 			// and default the name
 			String	name = inFile.getName ();

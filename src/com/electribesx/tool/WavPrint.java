@@ -29,8 +29,6 @@ public class WavPrint
 
 		for (int i = 1; fis.available () > 0; i++)
 		{
-			byte[]	vsFrame = new byte [3];
-			
 			String	subChunkType = read4ByteLiteral (fis);
 			System.out.println ("subchunk" + i + " ID = " + subChunkType);
 			

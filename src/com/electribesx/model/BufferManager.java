@@ -1,8 +1,51 @@
 package com.electribesx.model;
 
+import java.io.EOFException;
+import java.io.InputStream;
 
 public class BufferManager
 {
+	// these don't belong here but tbh i didn't know where else to put them...
+	
+	// STATIC PUBLIC METHODS
+	
+	public static int
+	read2ByteInteger (InputStream inStream)
+	throws Exception
+	{
+		int	value = inStream.read ();
+		value |= inStream.read () << 8;
+		
+		return value;
+	}
+
+	public static int
+	read4ByteInteger (InputStream inStream)
+	throws Exception
+	{
+		int	value = inStream.read ();
+		value |= inStream.read () << 8;
+		value |= inStream.read () << 16;
+		value |= inStream.read () << 24;
+		
+		return value;
+	}
+
+	public static String
+	read4ByteLiteral (InputStream inStream)
+	throws Exception
+	{
+		byte[]	buffer = new byte [4];
+		int	cc = inStream.read (buffer);
+		if (cc < 1)
+		{
+			throw new EOFException ();
+		}
+		return new String (buffer, 0, 4);
+	}
+	
+	// PUBLIC CONSTRUCTOR
+
 	public
 	BufferManager (byte[] inBuffer, int inOffset)
 	{
@@ -10,6 +53,8 @@ public class BufferManager
 		this.offset = inOffset;
 	}
 
+	// PUBLIC METHODS
+	
 	public byte
 	getByte (int inOffset)
 	{
@@ -51,6 +96,12 @@ public class BufferManager
 		return result;
 	}
 
+	public String
+	getLiteral32 (int inOffset)
+	{
+		return new String (this.buffer, inOffset, 4);
+	}
+	
 	public short
 	getLittleEndian16 (int inOffset)
 	{
