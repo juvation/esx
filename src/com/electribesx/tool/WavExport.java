@@ -1,4 +1,4 @@
-// WavExtract.java
+// WavExport.java
 
 package com.electribesx.tool;
 
@@ -17,7 +17,7 @@ import com.electribesx.model.ESXStereoSample;
 // there's no stereo samples in the factory set
 // so we don't bother extracting those!
 
-public class WavExtract
+public class WavExport
 {
 	public static void
 	main (String[] inArgs)
@@ -25,7 +25,7 @@ public class WavExtract
 	{
 		if (inArgs.length < 2)
 		{
-			System.err.println ("usage: java WavExtract esxfile startsample-endsample (0-383)");
+			System.err.println ("usage: java WavExport esxfile startsample-endsample (0-383)");
 			System.exit (1);
 		}
 		
