@@ -126,7 +126,80 @@ public class WavExtract
 		// bits per sample is always 16 for the ESX
 		write2ByteInteger (bos, 16);
 		
-		// 'data' chunk
+		// 'smpl' CHUNK
+
+		write4ByteLiteral (bos, "smpl");
+		
+		// chunk size
+		// 9 smpl fields x4
+		// + num loops * (6x4)
+		int	chunkSize = 9 * 4;
+		
+		if (sample.getLoopStart () < sample.getLoopEnd ())
+		{
+			chunkSize += 24;
+		}
+		
+		write4ByteInteger (bos, chunkSize);
+		
+		// manufacturer, Korg?
+		write4ByteInteger (bos, 0x42);
+		
+		// product, ESX?
+		write4ByteInteger (bos, 0x71);
+		
+		// sample period
+		write4ByteInteger (bos, (int) ((long) 1000000000 / sample.getSampleRate ()));
+		
+		// midi unity note (?)
+		write4ByteInteger (bos, 0x3c);
+		
+		// midi pitch fraction (?)
+		write4ByteInteger (bos, 0);
+		
+		// smpte format
+		write4ByteInteger (bos, 0);
+		
+		// smpte offset
+		write4ByteInteger (bos, 0);
+		
+		// number of loops
+		if (sample.getLoopStart () < sample.getLoopEnd ())
+		{
+			write4ByteInteger (bos, 1);
+		}
+		else
+		{
+			write4ByteInteger (bos, 0);
+		}
+			
+		// sampler data size
+		write4ByteInteger (bos, sample.getSampleSize ());
+
+		// LOOP
+		
+		if (sample.getLoopStart () < sample.getLoopEnd ())
+		{
+			// cue point ID
+			write4ByteInteger (bos, 0);
+			
+			// type
+			write4ByteInteger (bos, 0);
+			
+			// start
+			write4ByteInteger (bos, sample.getLoopStart ());
+			
+			// end
+			write4ByteInteger (bos, sample.getLoopEnd ());
+			
+			// fraction (?)
+			write4ByteInteger (bos, 0);
+			
+			// play count (?)
+			write4ByteInteger (bos, 0);
+		}
+		
+		// 'data' CHUNK
 		
 		write4ByteLiteral (bos, "data");
 		
@@ -148,7 +221,7 @@ public class WavExtract
 		byte[]	wav = bos.toByteArray ();
 		
 		// now we can calculate the RIFF chunk size
-		int	chunkSize = wav.length - 8;
+		chunkSize = wav.length - 8;
 		wav [4] = (byte) ((chunkSize >> 0) & 0xff);
 		wav [5] = (byte) ((chunkSize >> 8) & 0xff);
 		wav [6] = (byte) ((chunkSize >> 16) & 0xff);
@@ -221,7 +294,41 @@ public class WavExtract
 		// bits per sample is always 16 for the ESX
 		write2ByteInteger (bos, 16);
 		
-		// 'data' chunk
+		// 'smpl' CHUNK
+
+		write4ByteLiteral (bos, "smpl");
+		
+		// chunk size
+		write4ByteInteger (bos, 36);
+		
+		// manufacturer, Korg?
+		write4ByteInteger (bos, 0x42);
+		
+		// product, ESX?
+		write4ByteInteger (bos, 0x71);
+		
+		// sample period
+		write4ByteInteger (bos, (int) ((long) 1000000000 / sample.getSampleRate ()));
+		
+		// midi unity note (?)
+		write4ByteInteger (bos, 0x3c);
+		
+		// midi pitch fraction (?)
+		write4ByteInteger (bos, 0);
+		
+		// smpte format
+		write4ByteInteger (bos, 0);
+		
+		// smpte offset
+		write4ByteInteger (bos, 0);
+		
+		// number of loops - always zero for stereo
+		write4ByteInteger (bos, 0);
+			
+		// sampler data size
+		write4ByteInteger (bos, sample.getSampleSize ());
+
+		// 'data' CHUNK
 		
 		write4ByteLiteral (bos, "data");
 		

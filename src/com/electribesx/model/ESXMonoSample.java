@@ -146,7 +146,6 @@ implements ESXSample
 		{
 			System.out.println (inSampleNumber + ": '" + getString (NAME_OFFSET, 8) + "'");
 			
-			/*
 			System.out.println (" data start offset " + getBigEndian32 (DATA_START_OFFSET));
 			System.out.println (" data end offset " + getBigEndian32 (DATA_END_OFFSET));
 			System.out.println (" sample start " + getBigEndian32 (SAMPLE_START_OFFSET));
@@ -155,7 +154,6 @@ implements ESXSample
 			System.out.println (" sample rate " + getBigEndian32 (SAMPLE_RATE_OFFSET));
 			System.out.println (" sample tune " + getBigEndian16 (SAMPLE_TUNE_OFFSET));
 			System.out.println (" sample level " + getByte (LEVEL_OFFSET));
-			*/
 		}
 	}
 	
@@ -165,6 +163,18 @@ implements ESXSample
 		return getBigEndian32 (DATA_START_OFFSET);
 	}
 
+	public int
+	getLoopEnd ()
+	{
+		return getBigEndian32 (SAMPLE_END_OFFSET);
+	}
+
+	public int
+	getLoopStart ()
+	{
+		return getBigEndian32 (LOOP_OFFSET);
+	}
+	
 	public String
 	getName ()
 	{

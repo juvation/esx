@@ -58,7 +58,7 @@ public class WavPrint
 			if (subChunkType.equalsIgnoreCase ("data"))
 			{
 				int	wavFrames = subChunkSize / blockAlign;
-				System.out.println ("wavFrames = " + wavFrames);
+				System.out.println ("number of frames = " + wavFrames);
 				fis.skip (subChunkSize);
 			}
 			else
@@ -72,11 +72,28 @@ public class WavPrint
 				System.out.println ("MIDI pitch fraction note = " + read4ByteInteger (fis));
 				System.out.println ("SMPTE format = " + read4ByteInteger (fis));
 				System.out.println ("SMPTE offset = " + read4ByteInteger (fis));
-				System.out.println ("num sample loops = " + read4ByteInteger (fis));
-				System.out.println ("sampler data = " + read4ByteInteger (fis));
+				int	numLoops = read4ByteInteger (fis);
+				System.out.println ("num sample loops = " + numLoops);
+				System.out.println ("sampler data size = " + read4ByteInteger (fis));
 
-				// skip the rest of the chunk
-				fis.skip (subChunkSize - (9 * 4));
+				for (int j = 0; j < numLoops; j++)
+				{
+					System.out.println ("cue point ID = " + read4ByteInteger (fis));
+					System.out.println ("type = " + read4ByteInteger (fis));
+					System.out.println ("start = " + read4ByteInteger (fis));
+					System.out.println ("end = " + read4ByteInteger (fis));
+					System.out.println ("fraction = " + read4ByteInteger (fis));
+					System.out.println ("play count = " + read4ByteInteger (fis));
+				}
+
+				int	skip = subChunkSize;
+				skip -= (9 * 4);
+				skip -= (numLoops * (6 * 4));
+				
+				if (skip > 0)
+				{
+					fis.skip (skip);
+				}
 			}
 			else
 			{
