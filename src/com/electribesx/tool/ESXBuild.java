@@ -46,7 +46,7 @@ public class ESXBuild
 			if (value != null && value.length () > 0)
 			{
 				System.out.println ("setting mono sample " + i + " to file " + value);
-				file.getMonoSample (i).initFromFile (new File (value));
+				file.getMonoSample (i).initFromFile2 (new File (value));
 
 				key = "monosample." + i + ".name";
 				value = properties.getProperty (key);

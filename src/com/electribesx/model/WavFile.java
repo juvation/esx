@@ -104,8 +104,8 @@ public class WavFile
 					// only grab the first loop
 					if (this.numLoops > 0)
 					{
-						this.loopStart = bm.getLittleEndian32 (8);
-						this.loopEnd = bm.getLittleEndian32 (12);
+						this.loopStart = bm.getLittleEndian32 (36 + 8);
+						this.loopEnd = bm.getLittleEndian32 (36 + 12);
 					}
 				}
 				else
@@ -123,15 +123,45 @@ public class WavFile
 	// PUBLIC METHODS
 	
 	public int
+	getBitsPerSample ()
+	{
+		return this.bitsPerSample;
+	}
+
+	public int
+	getBlockAlign ()
+	{
+		return this.blockAlign;
+	}
+
+	public byte[]
+	getChunk (String inName)
+	{
+		return this.chunks.get (inName);
+	}
+	
+	public int
 	getLoopStart ()
 	{
 		return this.loopStart;
 	}
 
 	public int
+	getNumFrames ()
+	{
+		return this.numFrames;
+	}
+	
+	public int
 	getNumLoops ()
 	{
 		return this.numLoops;
+	}
+	
+	public int
+	getSampleRate ()
+	{
+		return this.sampleRate;
 	}
 	
 	// PRIVATE METHODS

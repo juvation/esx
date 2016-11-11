@@ -147,6 +147,80 @@ implements ESXSample
 		}
 	}
 	
+	public void
+	initFromFile2 (File inFile)
+	throws Exception
+	{
+		WavFile	wavFile = new WavFile (inFile, true);
+		
+		byte[]	sampleData = wavFile.getChunk ("data");
+		ByteArrayOutputStream	bos = new ByteArrayOutputStream ();
+		
+		if (wavFile.getBitsPerSample () == 8)
+		{
+			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			{
+				int	sample = (int) sampleData [i];
+				
+				// 8-bit audio is 0-255, convert to -128-127
+				sample -= 128;
+				
+				// ESX samples are big-endian 16-bit
+				bos.write (sample);
+				bos.write (0);
+			}
+		}
+		else
+		if (wavFile.getBitsPerSample () == 16)
+		{
+			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			{
+				// ESX samples are big-endian 16-bit
+				bos.write (sampleData [i + 1]);
+				bos.write (sampleData [i]);
+			}
+		}
+		else
+		if (wavFile.getBitsPerSample () == 24)
+		{
+			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			{
+				// ESX samples are big-endian 16-bit
+				bos.write (sampleData [i + 2]);
+				bos.write (sampleData [i + 1]);
+			}
+		}
+		else
+		{
+			throw new Exception (wavFile.getBitsPerSample () + " not supported");
+		}
+		
+		this.data = bos.toByteArray ();
+		this.offset = 0;
+		this.size = this.data.length;
+
+		setBigEndian32 (SAMPLE_RATE_OFFSET, wavFile.getSampleRate ());
+		setBigEndian32 (SAMPLE_START_OFFSET, 0);
+		setBigEndian32 (SAMPLE_END_OFFSET, wavFile.getNumFrames () - 1);
+		
+		if (wavFile.getNumLoops () > 0)
+		{
+			System.out.println ("loops found in wav, setting loop start to " + wavFile.getLoopStart ());
+			System.out.println ("num frames is " + wavFile.getNumFrames ());
+			setBigEndian32 (LOOP_OFFSET, wavFile.getLoopStart ());
+		}
+		else
+		{
+			System.out.println ("no loops found in wav");
+			setBigEndian32 (LOOP_OFFSET, wavFile.getNumFrames () - 1);
+		}
+		
+		// and default the name
+		String	name = inFile.getName ();
+		int	dotIndex = name.indexOf ('.');
+		setName (name.substring (0, dotIndex));
+	}
+	
 	// DEBUG PUBLIC METHODS
 	
 	public void
