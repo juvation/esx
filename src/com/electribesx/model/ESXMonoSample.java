@@ -13,8 +13,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 public class ESXMonoSample
-extends BufferManager
-implements ESXSample
+extends ESXSample
 {
 	// offset is into the buffer to the sample's metadata
 	public
@@ -312,6 +311,20 @@ implements ESXSample
 		setBigEndian32 (SAMPLE_RATE_OFFSET, inSampleRate);
 	}
 	
+	public void
+	setSampleTune (float inSampleTune)
+	throws Exception
+	{
+		setBigEndian16 (SAMPLE_TUNE_OFFSET, serialiseSampleTune (inSampleTune));
+		
+		// TEST CODE
+		System.out.println ("serialising sample tune " + inSampleTune);
+		int	serialised = serialiseSampleTune (inSampleTune);
+		float	deserialised = deserialiseSampleTune (serialised);
+		System.out.println ("deserialised " + deserialised);
+		
+	}
+	
 	// well oops there's more than just the actual sample data
 	// even though it SOUNDS fine
 	public void
@@ -356,7 +369,7 @@ implements ESXSample
 
 		dis.flush ();
 	}
-	
+
 	// PUBLIC CONSTANTS
 	
 	public static final int

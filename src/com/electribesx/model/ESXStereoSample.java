@@ -13,8 +13,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 public class ESXStereoSample
-extends BufferManager
-implements ESXSample
+extends ESXSample
 {
 	// offset is into the buffer to the sample's metadata
 	public
@@ -162,6 +161,108 @@ implements ESXSample
 		}
 	}
 	
+	public void
+	initFromFile2 (File inFile)
+	throws Exception
+	{
+		WavFile	wavFile = new WavFile (inFile, true);
+		
+		byte[]	sampleData = wavFile.getChunk ("data");
+		ByteArrayOutputStream	bos1 = new ByteArrayOutputStream ();
+		ByteArrayOutputStream	bos2 = new ByteArrayOutputStream ();
+		
+		if (wavFile.getBitsPerSample () == 8)
+		{
+			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			{
+				int	sample = (int) sampleData [i];
+				
+				// 8-bit audio is 0-255, convert to -128-127
+				sample -= 128;
+				
+				// ESX samples are big-endian 16-bit
+				bos1.write (sample);
+				bos1.write (0);
+				
+				if (wavFile.getNumChannels () == 1)
+				{
+					bos2.write (sample);
+					bos2.write (0);
+				}
+				else
+				{
+					sample = (int) sampleData [i + 1];
+					
+					bos2.write (sample);
+					bos2.write (0);
+				}
+			}
+		}
+		else
+		if (wavFile.getBitsPerSample () == 16)
+		{
+			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			{
+				// ESX samples are big-endian 16-bit
+				bos1.write (sampleData [i + 1]);
+				bos1.write (sampleData [i]);
+
+				if (wavFile.getNumChannels () == 1)
+				{
+					bos2.write (sampleData [i + 1]);
+					bos2.write (sampleData [i]);
+				}
+				else
+				{
+					bos2.write (sampleData [i + 3]);
+					bos2.write (sampleData [i + 2]);
+				}
+			}
+		}
+		else
+		if (wavFile.getBitsPerSample () == 24)
+		{
+			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			{
+				// ESX samples are big-endian 16-bit
+				bos1.write (sampleData [i + 2]);
+				bos1.write (sampleData [i + 1]);
+
+				if (wavFile.getNumChannels () == 1)
+				{
+					bos2.write (sampleData [i + 2]);
+					bos2.write (sampleData [i + 1]);
+				}
+				else
+				{
+					bos2.write (sampleData [i + 5]);
+					bos2.write (sampleData [i + 4]);
+				}
+			}
+		}
+		else
+		{
+			throw new Exception (wavFile.getBitsPerSample () + " not supported");
+		}
+		
+		this.data1 = bos1.toByteArray ();
+		this.offset1 = 0;
+
+		this.data2 = bos2.toByteArray ();
+		this.offset2 = 0;
+
+		this.size = this.data1.length;
+
+		setBigEndian32 (SAMPLE_RATE_OFFSET, wavFile.getSampleRate ());
+		setBigEndian32 (SAMPLE_START_OFFSET, 0);
+		setBigEndian32 (SAMPLE_END_OFFSET, wavFile.getNumFrames () - 1);
+		
+		// and default the name
+		String	name = inFile.getName ();
+		int	dotIndex = name.indexOf ('.');
+		setName (name.substring (0, dotIndex));
+	}
+	
 	// DEBUG PUBLIC METHODS
 	
 	public void
@@ -272,6 +373,13 @@ implements ESXSample
 		setBigEndian32 (SAMPLE_RATE_OFFSET, inSampleRate);
 	}
 	
+	public void
+	setSampleTune (float inSampleTune)
+	throws Exception
+	{
+		setBigEndian16 (SAMPLE_TUNE_OFFSET, serialiseSampleTune (inSampleTune));
+	}
+
 	// well oops there's more than just the actual sample data
 	// even though it SOUNDS fine
 	public void

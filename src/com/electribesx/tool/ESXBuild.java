@@ -56,6 +56,17 @@ public class ESXBuild
 					System.out.println ("setting mono sample " + i + " name to " + value);
 					file.getMonoSample (i).setName (value);
 				}
+
+				// this is handy because it's lost on wav export/import
+				key = "monosample." + i + ".tune";
+				value = properties.getProperty (key);
+				
+				if (value != null && value.length () > 0)
+				{
+					float	tune = Float.parseFloat (value);
+					System.out.println ("setting mono sample " + i + " name to " + tune);
+					file.getMonoSample (i).setSampleTune (tune);
+				}
 			}
 		}
 
@@ -69,7 +80,7 @@ public class ESXBuild
 			if (value != null && value.length () > 0)
 			{
 				System.out.println ("setting stereo sample " + i + " to file " + value);
-				file.getStereoSample (i).initFromFile (new File (value));
+				file.getStereoSample (i).initFromFile2 (new File (value));
 
 				key = "stereosample." + i + ".name";
 				value = properties.getProperty (key);

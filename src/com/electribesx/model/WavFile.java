@@ -147,6 +147,12 @@ public class WavFile
 	}
 
 	public int
+	getNumChannels ()
+	{
+		return this.numChannels;
+	}
+	
+	public int
 	getNumFrames ()
 	{
 		return this.numFrames;
