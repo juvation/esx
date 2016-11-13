@@ -316,13 +316,6 @@ extends ESXSample
 	throws Exception
 	{
 		setBigEndian16 (SAMPLE_TUNE_OFFSET, serialiseSampleTune (inSampleTune));
-		
-		// TEST CODE
-		System.out.println ("serialising sample tune " + inSampleTune);
-		int	serialised = serialiseSampleTune (inSampleTune);
-		float	deserialised = deserialiseSampleTune (serialised);
-		System.out.println ("deserialised " + deserialised);
-		
 	}
 	
 	// well oops there's more than just the actual sample data

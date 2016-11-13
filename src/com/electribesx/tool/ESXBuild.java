@@ -64,7 +64,7 @@ public class ESXBuild
 				if (value != null && value.length () > 0)
 				{
 					float	tune = Float.parseFloat (value);
-					System.out.println ("setting mono sample " + i + " name to " + tune);
+					System.out.println ("setting mono sample " + i + " tune to " + tune);
 					file.getMonoSample (i).setSampleTune (tune);
 				}
 			}
