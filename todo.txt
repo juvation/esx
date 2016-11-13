@@ -11,5 +11,7 @@ stereo wav export
 
 TODO
 
-support for tuning and other smpl chunk features back and forth
+revisit loop markers, particularly setting sample end to loop end on wav import
+convert sample tune to midi note equivalent and back again? tricky...
+
 

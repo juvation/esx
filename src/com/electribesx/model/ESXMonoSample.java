@@ -200,18 +200,18 @@ extends ESXSample
 
 		setBigEndian32 (SAMPLE_RATE_OFFSET, wavFile.getSampleRate ());
 		setBigEndian32 (SAMPLE_START_OFFSET, 0);
-		setBigEndian32 (SAMPLE_END_OFFSET, wavFile.getNumFrames () - 1);
 		
 		if (wavFile.getNumLoops () > 0)
 		{
 			System.out.println ("loops found in wav, setting loop start to " + wavFile.getLoopStart ());
-			System.out.println ("num frames is " + wavFile.getNumFrames ());
 			setBigEndian32 (LOOP_OFFSET, wavFile.getLoopStart ());
+			setBigEndian32 (SAMPLE_END_OFFSET, wavFile.getLoopEnd ());
 		}
 		else
 		{
 			System.out.println ("no loops found in wav");
 			setBigEndian32 (LOOP_OFFSET, wavFile.getNumFrames () - 1);
+			setBigEndian32 (SAMPLE_END_OFFSET, wavFile.getNumFrames () - 1);
 		}
 		
 		// and default the name

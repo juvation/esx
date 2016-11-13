@@ -141,6 +141,12 @@ public class WavFile
 	}
 	
 	public int
+	getLoopEnd ()
+	{
+		return this.loopEnd;
+	}
+
+	public int
 	getLoopStart ()
 	{
 		return this.loopStart;
