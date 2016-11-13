@@ -152,14 +152,20 @@ extends ESXSample
 	{
 		WavFile	wavFile = new WavFile (inFile, true);
 		
+		System.out.println ("sample rate is " + wavFile.getSampleRate ());
+		System.out.println ("bits per sample is " + wavFile.getBitsPerSample ());
+		System.out.println ("frame count is " + wavFile.getNumFrames ());
+		System.out.println ("block align is " + wavFile.getBlockAlign ());
+		
 		byte[]	sampleData = wavFile.getChunk ("data");
 		ByteArrayOutputStream	bos = new ByteArrayOutputStream ();
 		
 		if (wavFile.getBitsPerSample () == 8)
 		{
-			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			for (int i = 0; i < wavFile.getNumFrames (); i++)
 			{
-				int	sample = (int) sampleData [i];
+				int	offset = i * wavFile.getBlockAlign ();
+				int	sample = (int) sampleData [offset];
 				
 				// 8-bit audio is 0-255, convert to -128-127
 				sample -= 128;
@@ -172,21 +178,25 @@ extends ESXSample
 		else
 		if (wavFile.getBitsPerSample () == 16)
 		{
-			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			for (int i = 0; i < wavFile.getNumFrames (); i++)
 			{
+				int	offset = i * wavFile.getBlockAlign ();
+				
 				// ESX samples are big-endian 16-bit
-				bos.write (sampleData [i + 1]);
-				bos.write (sampleData [i]);
+				bos.write (sampleData [offset + 1]);
+				bos.write (sampleData [offset]);
 			}
 		}
 		else
 		if (wavFile.getBitsPerSample () == 24)
 		{
-			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			for (int i = 0; i < wavFile.getNumFrames (); i++)
 			{
+				int	offset = i * wavFile.getBlockAlign ();
+
 				// ESX samples are big-endian 16-bit
-				bos.write (sampleData [i + 2]);
-				bos.write (sampleData [i + 1]);
+				bos.write (sampleData [offset + 2]);
+				bos.write (sampleData [offset + 1]);
 			}
 		}
 		else
@@ -198,6 +208,8 @@ extends ESXSample
 		this.offset = 0;
 		this.size = this.data.length;
 
+		System.out.println ("data size is " + this.size);
+		
 		setBigEndian32 (SAMPLE_RATE_OFFSET, wavFile.getSampleRate ());
 		setBigEndian32 (SAMPLE_START_OFFSET, 0);
 		

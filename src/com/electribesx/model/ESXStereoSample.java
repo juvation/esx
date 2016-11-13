@@ -173,9 +173,10 @@ extends ESXSample
 		
 		if (wavFile.getBitsPerSample () == 8)
 		{
-			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			for (int i = 0; i < wavFile.getNumFrames (); i++)
 			{
-				int	sample = (int) sampleData [i];
+				int	offset = i * wavFile.getBlockAlign ();
+				int	sample = (int) sampleData [offset];
 				
 				// 8-bit audio is 0-255, convert to -128-127
 				sample -= 128;
@@ -191,7 +192,7 @@ extends ESXSample
 				}
 				else
 				{
-					sample = (int) sampleData [i + 1];
+					sample = (int) sampleData [offset + 1];
 					
 					bos2.write (sample);
 					bos2.write (0);
@@ -201,42 +202,46 @@ extends ESXSample
 		else
 		if (wavFile.getBitsPerSample () == 16)
 		{
-			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			for (int i = 0; i < wavFile.getNumFrames (); i++)
 			{
+				int	offset = i * wavFile.getBlockAlign ();
+
 				// ESX samples are big-endian 16-bit
-				bos1.write (sampleData [i + 1]);
-				bos1.write (sampleData [i]);
+				bos1.write (sampleData [offset + 1]);
+				bos1.write (sampleData [offset]);
 
 				if (wavFile.getNumChannels () == 1)
 				{
-					bos2.write (sampleData [i + 1]);
-					bos2.write (sampleData [i]);
+					bos2.write (sampleData [offset + 1]);
+					bos2.write (sampleData [offset]);
 				}
 				else
 				{
-					bos2.write (sampleData [i + 3]);
-					bos2.write (sampleData [i + 2]);
+					bos2.write (sampleData [offset + 3]);
+					bos2.write (sampleData [offset + 2]);
 				}
 			}
 		}
 		else
 		if (wavFile.getBitsPerSample () == 24)
 		{
-			for (int i = 0; i < wavFile.getNumFrames (); i += wavFile.getBlockAlign ())
+			for (int i = 0; i < wavFile.getNumFrames (); i++)
 			{
+				int	offset = i * wavFile.getBlockAlign ();
+
 				// ESX samples are big-endian 16-bit
-				bos1.write (sampleData [i + 2]);
-				bos1.write (sampleData [i + 1]);
+				bos1.write (sampleData [offset + 2]);
+				bos1.write (sampleData [offset + 1]);
 
 				if (wavFile.getNumChannels () == 1)
 				{
-					bos2.write (sampleData [i + 2]);
-					bos2.write (sampleData [i + 1]);
+					bos2.write (sampleData [offset + 2]);
+					bos2.write (sampleData [offset + 1]);
 				}
 				else
 				{
-					bos2.write (sampleData [i + 5]);
-					bos2.write (sampleData [i + 4]);
+					bos2.write (sampleData [offset + 5]);
+					bos2.write (sampleData [offset + 4]);
 				}
 			}
 		}
