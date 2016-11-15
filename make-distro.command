@@ -37,6 +37,9 @@ zip -r electribesx.zip electribesx.jar
 # driver scripts
 zip -r electribesx.zip build.sh print.sh wavexport.sh
 
+# ESX files
+zip -r electribsx.zip factory.esx empty.esx
+
 # readme file - maybe i should write this
 zip -r electribesx.zip readme.txt
 

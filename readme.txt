@@ -13,4 +13,9 @@ Yes, sorry, no GUI here. For this kind of job, I prefer having driver files in w
 
 Facilities
 
-These tools essentially allow you to import Wave files into your Electribe via its “all” file format. 
+These tools essentially allow you to import Wave files into your Electribe via its “all” file format. This file contains the entire memory of the Electribe, including patterns, songs, samples, slices, everything. So if we have a tool which understands the format of that file, we can generate files with that format outside the Electribe, then load them in. The net effect is the same as using the Electribe to do it, but in the case of loading samples, in the blink of an eye instead of all day.
+
+Usually you might start with the “empty.esx” file included in the distro, which has nothing in it. You would then write a file which told the tool which samples to put where, and optionally to assign various samples to parts in patterns. Then the tool loads the “empty.esx”, reads the driver file for instructions, then generates a new “out.esx” file which can then be loaded into the Electribe.
+
+Tutorial
+

@@ -277,7 +277,9 @@ extends ESXSample
 		
 		if (data1StartOffset >= 0)
 		{
-			System.err.print (inSampleNumber + ": " + getString (NAME_OFFSET, 8) + "'");
+			System.out.print (inSampleNumber + ": '" + getString (NAME_OFFSET, 8) + "'");
+			System.out.print (" (" + getSampleSize () + " bytes)");
+			System.out.println ();
 
 			/*
 			int	data1EndOffset = getBigEndian32 (DATA_1_END_OFFSET);

@@ -241,8 +241,11 @@ extends ESXSample
 		
 		if (dataStartOffset >= 0)
 		{
-			System.out.println (inSampleNumber + ": '" + getString (NAME_OFFSET, 8) + "'");
+			System.out.print (inSampleNumber + ": '" + getString (NAME_OFFSET, 8) + "'");
+			System.out.print (" (" + getSampleSize () + " bytes)");
+			System.out.println ();
 			
+			/*
 			System.out.println (" data start offset " + getBigEndian32 (DATA_START_OFFSET));
 			System.out.println (" data end offset " + getBigEndian32 (DATA_END_OFFSET));
 			System.out.println (" sample start " + getBigEndian32 (SAMPLE_START_OFFSET));
@@ -251,6 +254,7 @@ extends ESXSample
 			System.out.println (" sample rate " + getBigEndian32 (SAMPLE_RATE_OFFSET));
 			System.out.println (" sample tune " + getBigEndian16 (SAMPLE_TUNE_OFFSET));
 			System.out.println (" sample level " + getByte (LEVEL_OFFSET));
+			*/
 		}
 	}
 	
