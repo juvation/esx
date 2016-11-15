@@ -14,5 +14,6 @@ TODO
 
 convert sample tune to midi note equivalent and back again? tricky...
 allow deletion of samples from a loaded ESX file
+stress testing on the factory ESX file
 
 
