@@ -8,10 +8,11 @@ pattern set/clear step
 mono wav export
 verifier
 stereo wav export
+set sample end to loop end on wav import
 
 TODO
 
-revisit loop markers, particularly setting sample end to loop end on wav import
 convert sample tune to midi note equivalent and back again? tricky...
+allow deletion of samples from a loaded ESX file
 
 
