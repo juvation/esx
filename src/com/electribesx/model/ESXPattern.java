@@ -50,6 +50,12 @@ extends BufferManager
 	}
 	
 	public void
+	setLastStep (int inLastStep)
+	{
+		setByte (LAST_STEP_OFFSET, (byte) inLastStep);
+	}
+	
+	public void
 	setName (String inName)
 	{
 		setString (NAME_OFFSET, inName, 8, ' ');

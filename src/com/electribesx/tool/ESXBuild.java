@@ -110,6 +110,16 @@ public class ESXBuild
 				pattern.setName (value);
 				found = true;
 			}
+
+			key = "pattern." + i + ".laststep";
+			value = properties.getProperty (key);
+			
+			if (value != null && value.length () > 0)
+			{
+				System.out.println ("setting pattern " + i + " last step to " + value);
+				pattern.setLastStep (Integer.parseInt (value));
+				found = true;
+			}
 			
 			for (int j = 0; j < 9; j++)
 			{
