@@ -142,6 +142,8 @@ extends BufferManager
 	verify ()
 	throws Exception
 	{
+		System.out.println ("verifying");
+		
 		// verify that the mono samples start where they should
 		for (int i = 0; i < 256; i++)
 		{
@@ -243,6 +245,64 @@ extends BufferManager
 				// System.out.println ("no sample in slot " + i);
 			}
 		}
+		
+		// and now verify that we have the correct magic shit at the end
+
+		// note that the current sample offset stored in the file
+		// is relative to the start of the sample area 0x250000
+		int	sampleOffset = 0x250000 + getBigEndian32 (CURRENT_SAMPLE_OFFSET_OFFSET);
+
+		int	magic = 0;
+		
+		System.out.println ("checking end block magic 1");
+
+		magic = getBigEndian32 (sampleOffset);
+		
+		if (magic != 0x80007fff)
+		{
+			System.out.println ("magic number 1 mismatch in end block");
+			System.out.println (Integer.toHexString (magic) + " != 0x80007fff");
+			
+			throw new Exception ("magic number 1 mismatch in end block");
+		}
+		
+		System.out.println ("checking end block sample offset");
+
+		int	verifySampleOffset = 0x250000 + getBigEndian32 (sampleOffset + 4);
+
+		if (verifySampleOffset != sampleOffset)
+		{
+			System.out.println ("sample offset mismatch in end block");
+			System.out.println (sampleOffset + " != " + verifySampleOffset);
+			
+			throw new Exception ("sample offset mismatch in end block");
+		}
+
+		System.out.println ("checking end block magic 2");
+
+		magic = getBigEndian32 (sampleOffset + 8);
+		
+		if (magic != 0x017ffffe)
+		{
+			System.out.println ("magic number 2 mismatch in end block");
+			System.out.println (Integer.toHexString (magic) + " != 0x017ffffe");
+			
+			throw new Exception ("magic number 2 mismatch in end block");
+		}
+
+		System.out.println ("checking end block magic 3");
+
+		magic = getBigEndian32 (sampleOffset + 12);
+		
+		if (magic != 0x00ffffff)
+		{
+			System.out.println ("magic number 3 mismatch in end block");
+			System.out.println (Integer.toHexString (magic) + " != 0x00ffffff");
+			
+			throw new Exception ("magic number 3 mismatch in end block");
+		}
+		
+		System.out.println ("verify OK");
 	}
 	
 	public void

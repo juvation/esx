@@ -152,10 +152,12 @@ extends ESXSample
 	{
 		WavFile	wavFile = new WavFile (inFile, true);
 		
+		/*
 		System.out.println ("sample rate is " + wavFile.getSampleRate ());
 		System.out.println ("bits per sample is " + wavFile.getBitsPerSample ());
 		System.out.println ("frame count is " + wavFile.getNumFrames ());
 		System.out.println ("block align is " + wavFile.getBlockAlign ());
+		*/
 		
 		byte[]	sampleData = wavFile.getChunk ("data");
 		ByteArrayOutputStream	bos = new ByteArrayOutputStream ();
@@ -208,20 +210,20 @@ extends ESXSample
 		this.offset = 0;
 		this.size = this.data.length;
 
-		System.out.println ("data size is " + this.size);
+		// System.out.println ("data size is " + this.size);
 		
 		setBigEndian32 (SAMPLE_RATE_OFFSET, wavFile.getSampleRate ());
 		setBigEndian32 (SAMPLE_START_OFFSET, 0);
 		
 		if (wavFile.getNumLoops () > 0)
 		{
-			System.out.println ("loops found in wav, setting loop start to " + wavFile.getLoopStart ());
+			System.out.println ("loop found in wav, setting loop start to " + wavFile.getLoopStart ());
 			setBigEndian32 (LOOP_OFFSET, wavFile.getLoopStart ());
 			setBigEndian32 (SAMPLE_END_OFFSET, wavFile.getLoopEnd ());
 		}
 		else
 		{
-			System.out.println ("no loops found in wav");
+			// System.out.println ("no loops found in wav");
 			setBigEndian32 (LOOP_OFFSET, wavFile.getNumFrames () - 1);
 			setBigEndian32 (SAMPLE_END_OFFSET, wavFile.getNumFrames () - 1);
 		}

@@ -16,9 +16,9 @@ public class ESXBuild
 	main (String[] inArgs)
 	throws Exception
 	{
-		if (inArgs.length < 2)
+		if (inArgs.length < 3)
 		{
-			System.err.println ("usage: ESX file.esx file.properties");
+			System.err.println ("usage: ESX file.esx file.properties outputfile.esx");
 			System.exit (1);
 		}
 
@@ -135,6 +135,8 @@ public class ESXBuild
 			
 					if (value != null && value.length () > 0)
 					{
+						System.out.println ("setting pattern " + i + " part " + j + " to pattern " + value);
+
 						for (int k = 0; k < value.length () && k < 64; k++)
 						{
 							char	ch = value.charAt (k);
@@ -158,7 +160,7 @@ public class ESXBuild
 			}
 		}
 		
-		File	newFile = new File ("out.esx");
+		File	newFile = new File (inArgs [2]);
 		file.write (newFile);
 		
 		// verify only works on a freshly loaded file

@@ -20,7 +20,6 @@ fi
 
 rm -f electribesx.jar
 
-# fresh build, James
 ant clean build
 
 if test ! -f electribesx.jar
@@ -38,12 +37,16 @@ zip -r electribesx.zip electribesx.jar
 zip -r electribesx.zip build.sh print.sh wavexport.sh
 
 # ESX files
-zip -r electribsx.zip factory.esx empty.esx
+zip -r electribesx.zip factory.esx empty.esx
 
-# readme file - maybe i should write this
+# 909 samples just because
+zip -r electribesx.zip samples/TR909
+
+# driver file for 909
+zip -r electribesx.zip tr909.properties
+
+# readme file
 zip -r electribesx.zip readme.txt
-
-# should we include some samples etc?
 
 echo make-distro.command: done
 
