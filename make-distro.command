@@ -12,9 +12,9 @@ fi
 
 echo make-distro.command: checking environment
 
-if test ! -f electribesx.jar
+if test ! -f build.xml
 then
-	echo ideally this script would be in the same directory as electribesx.jar
+	echo ideally this script would be in the same directory as build.xml from the distro
 	exit 1
 fi
 

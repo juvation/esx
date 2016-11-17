@@ -5,6 +5,10 @@ LEGAL
 
 This software is copyright 2016 Jason Proctor. I’m not responsible for any loss of content in your Electribe which results from using these tools. Please save all content in your Electribe before going any further.
 
+ACKNOWLEDGEMENTS
+
+Thanks to Jeff @skratchdot for his Open Electribe Editor (previously ESX Wave Organizer) without the source to which, this tool would not exist - or at least it would have taken much longer to develop, for sure.
+
 INTRO
 
 The Electribe SX is a wicked box but it was made before USB was generally available on such instruments. Hence, loading samples requires copying them to a card, and even then, the Electribe only allows loading them singly. So if you have, say, a load of nice vintage drum machine samples, it’s a laborious process to get them all where you want them.
