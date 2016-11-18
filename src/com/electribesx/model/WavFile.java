@@ -170,6 +170,31 @@ public class WavFile
 		return this.numLoops;
 	}
 	
+	// assuming bps is an integral number of bytes here
+	public int
+	getSample (int inFrameIndex, int inChannel)
+	{
+		int	sample = 0;
+		byte[]	buffer = this.chunks.get ("data");
+
+		int	offset = inFrameIndex * this.blockAlign;
+		offset += (inChannel * (this.bitsPerSample / 8));
+		
+		if (this.bitsPerSample == 8)
+		{
+			// note 8-bit samples are unsigned
+			sample = buffer [offset] & 0xff;
+		}
+		else
+		{
+			BufferManager	bm = new BufferManager (buffer, offset);
+
+			sample = bm.getLittleEndianInteger (0, this.bitsPerSample / 8);
+		}
+		
+		return sample;
+	}
+
 	public int
 	getSampleRate ()
 	{

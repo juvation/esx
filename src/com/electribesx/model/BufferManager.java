@@ -96,6 +96,27 @@ public class BufferManager
 		return result;
 	}
 
+	public int
+	getBigEndianInteger (int inOffset, int inBytes)
+	{
+		int	result = 0;
+		
+		for (int i = 0; i < inBytes; i++)
+		{
+			// don't chop the first one at 8 bits as we want it to sign-extend
+			if (i == 0)
+			{
+				result = this.buffer [this.offset + inOffset + i];
+			}
+			else
+			{
+				result |= (this.buffer [this.offset + inOffset + i] & 0xff);
+			}
+		}
+		
+		return result;
+	}
+
 	public String
 	getLiteral32 (int inOffset)
 	{
@@ -124,18 +145,33 @@ public class BufferManager
 		return result;
 	}
 	
-	public String
-	getFourByteString (int inOffset)
-	throws Exception
+	public int
+	getLittleEndianInteger (int inOffset, int inBytes)
 	{
-		byte[]	buffer = new byte [4];
+		int	result = 0;
 		
-		for (int i = 0; i < 4; i++)
+		for (int i = inBytes - 1; i >= 0; i--)
 		{
-			buffer [i] = getByte (inOffset + i);
+			result <<= 8;
+			
+			// don't chop the first one at 8 bits as we want it to sign-extend
+			if (i == (inBytes - 1))
+			{
+				result = this.buffer [this.offset + inOffset + i];
+			}
+			else
+			{
+				result |= (this.buffer [this.offset + inOffset + i] & 0xff);
+			}
 		}
 		
-		return new String (buffer, 0, 4);
+		// sign extend properly
+		if (inBytes < 4)
+		{
+			
+		}
+		
+		return result;
 	}
 
 	public String
