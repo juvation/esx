@@ -77,23 +77,13 @@ public class BufferManager
 	public short
 	getBigEndian16 (int inOffset)
 	{
-		short	result = (short) (this.buffer [this.offset + inOffset] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset + 1] & 0xff);
-		return result;
+		return (short) getBigEndianInteger (inOffset, 2);
 	}
 	
 	public int
 	getBigEndian32 (int inOffset)
 	{
-		int	result = (this.buffer [this.offset + inOffset] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset + 1] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset + 2] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset + 3] & 0xff);
-		return result;
+		return getBigEndianInteger (inOffset, 4);
 	}
 
 	public int
@@ -103,6 +93,8 @@ public class BufferManager
 		
 		for (int i = 0; i < inBytes; i++)
 		{
+			result <<= 8;
+			
 			// don't chop the first one at 8 bits as we want it to sign-extend
 			if (i == 0)
 			{
@@ -126,23 +118,13 @@ public class BufferManager
 	public short
 	getLittleEndian16 (int inOffset)
 	{
-		short	result = (short) (this.buffer [this.offset + inOffset + 1] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset] & 0xff);
-		return result;
+		return (short) getLittleEndianInteger (inOffset, 2);
 	}
 	
 	public int
 	getLittleEndian32 (int inOffset)
 	{
-		int	result = (this.buffer [this.offset + inOffset + 3] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset + 2] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset + 1] & 0xff);
-		result <<= 8;
-		result |= (this.buffer [this.offset + inOffset + 0] & 0xff);
-		return result;
+		return getLittleEndianInteger (inOffset, 4);
 	}
 	
 	public int
