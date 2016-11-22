@@ -22,6 +22,8 @@ FILE
 0x001b4200	00524288		256 x SLICE at 2048 bytes
 0x00250000	25165824		sample data
 
+@current_sample_start, relative to 0x250000	END_SAMPLES_MAGIC
+
 GLOBAL_PARAMETERS (192 bytes)
 
 0x00000000	00000001		memory protect enabled
@@ -235,11 +237,12 @@ STEREO_SAMPLE_DATA
 0x00000010				sample data
 
 
+SAMPLE_END_MAGIC
 
-
-
-
-
+0x00000000	00000004		0x80007fff magic
+0x00000004	00000004		current sample offset
+0x00000008	00000004		0x017ffffe magic
+0x0000000c	00000004		0x00ffffff magic
 
 
 
