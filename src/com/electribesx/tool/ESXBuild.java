@@ -99,18 +99,17 @@ public class ESXBuild
 		for (int i = 0; i < 256; i++)
 		{
 			ESXPattern	pattern = file.getPattern (i);
-
-			boolean	found = false;
 			
 			String	key = "pattern." + i + ".name";
 			String	value = properties.getProperty (key);
 			
-			if (value != null && value.length () > 0)
+			if (value == null || value.length () == 0)
 			{
-				System.out.println ("setting pattern " + i + " name to " + value);
-				pattern.setName (value);
-				found = true;
+				continue;
 			}
+			
+			System.out.println ("setting pattern " + i + " name to " + value);
+			pattern.setName (value);
 
 			key = "pattern." + i + ".laststep";
 			value = properties.getProperty (key);
@@ -119,7 +118,6 @@ public class ESXBuild
 			{
 				System.out.println ("setting pattern " + i + " last step to " + value);
 				pattern.setLastStep (Integer.parseInt (value));
-				found = true;
 			}
 			
 			// DRUM PARTS
@@ -133,8 +131,6 @@ public class ESXBuild
 			
 				if (value != null && value.length () > 0)
 				{
-					found = true;
-					
 					int	sampleNumber = Integer.parseInt (value);
 					
 					System.out.println ("setting pattern " + i + " drum part " + j + " to sample " + 
@@ -179,8 +175,6 @@ public class ESXBuild
 			
 				if (value != null && value.length () > 0)
 				{
-					found = true;
-					
 					int	sampleNumber = Integer.parseInt (value);
 					
 					System.out.println ("setting pattern " + i + " part " + j + " to sample " + 
@@ -202,14 +196,21 @@ public class ESXBuild
 					
 					for (int k = 0; k < noteStrings.length; k++)
 					{
-						part.setSequenceNote (k, noteStrings [k]);
+						String	noteString = noteStrings [k];
+						
+						if (noteString.equals ("."))
+						{
+							// ASSUME gate zero = rest
+							part.setSequenceGate (k, (byte) 0);
+						}
+						else
+						{
+							// ASSUME gate 2 = 0.75 somehow
+							part.setSequenceGate (k, (byte) 2);
+							part.setSequenceNote (k, noteStrings [k]);
+						}
 					}
 				}
-			}
-			
-			if (! found)
-			{
-				break;
 			}
 		}
 		

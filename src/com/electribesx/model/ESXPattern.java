@@ -40,6 +40,7 @@ extends BufferManager
 		int	fractionTempo = tempo & 0xf;
 		
 		System.out.println ("tempo = " + integerTempo + "." + fractionTempo);
+		System.out.println ("pattern config = " + getByte (CONFIG_FLAGS_OFFSET));
 		System.out.println ("last step = " + getByte (LAST_STEP_OFFSET));
 		
 		this.drumParts [0].dump (0);
@@ -88,6 +89,9 @@ extends BufferManager
 	
 	private static final int
 	TEMPO_OFFSET = 0x8;
+
+	private static final int
+	CONFIG_FLAGS_OFFSET = 0xb;
 
 	private static final int
 	LAST_STEP_OFFSET = 0xd;
