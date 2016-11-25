@@ -38,6 +38,18 @@ public class ESXPrint
 			file.dump ();
 		}
 		else
+		if (mode.equals ("pattern"))
+		{
+			if (param == -1)
+			{
+				file.getPattern (0).dump (0);
+			}
+			else
+			{
+				file.getPattern (param).dump (param);
+			}
+		}
+		else
 		if (mode.equals ("mono"))
 		{
 			if (param == -1)

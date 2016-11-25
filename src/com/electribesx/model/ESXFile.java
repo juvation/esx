@@ -77,17 +77,13 @@ extends BufferManager
 		System.out.println ("number of stereo samples = " + getBigEndian32 (NUM_STEREO_SAMPLES_OFFSET));
 		System.out.println ("current sample offset = " + getBigEndian32 (CURRENT_SAMPLE_OFFSET_OFFSET));
 		
-		// this.patterns [0].dump ();
-		
-		System.out.println ("mono samples...");
+		this.patterns [0].dump (0);
 		
 		for (int i = 0; i < 256; i++)
 		{
 			this.monoSamples [i].dump (i);
 		}
 
-		System.out.println ("stereo samples...");
-		
 		for (int i = 0; i < 128; i++)
 		{
 			this.stereoSamples [i].dump (i);

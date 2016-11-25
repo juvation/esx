@@ -15,16 +15,25 @@ extends BufferManager
 		
 		for (int i = 0; i < 9; i++)
 		{
-			this.drumParts [i] = new ESXDrumPart (this.buffer, this.offset + DRUM_PARTS_OFFSET + (i * ESXDrumPart.BUFFER_SIZE));
+			this.drumParts [i] = new ESXDrumPart	
+				(this, this.buffer, this.offset + DRUM_PARTS_OFFSET + (i * ESXDrumPart.BUFFER_SIZE));
+		}
+
+		this.keyboardParts = new ESXKeyboardPart [2];
+		
+		for (int i = 0; i < 2; i++)
+		{
+			this.keyboardParts [i] = new ESXKeyboardPart
+				(this, this.buffer, this.offset + KEYBOARD_PARTS_OFFSET + (i * ESXKeyboardPart.BUFFER_SIZE));
 		}
 	}
 
 	// PUBLIC METHODS
 	
 	public void
-	dump ()
+	dump (int inPatternNumber)
 	{
-		System.out.println ("name = '" + getString (NAME_OFFSET, 8) + "'");
+		System.out.println ("PATTERN " + inPatternNumber + " = '" + getString (NAME_OFFSET, 8) + "'");
 
 		int	tempo = getBigEndian16 (TEMPO_OFFSET);
 		int	integerTempo = (tempo >> 7) & 0x1ffff;
@@ -33,14 +42,8 @@ extends BufferManager
 		System.out.println ("tempo = " + integerTempo + "." + fractionTempo);
 		System.out.println ("last step = " + getByte (LAST_STEP_OFFSET));
 		
-		System.out.println ("drum part 0");
-		this.drumParts [0].dump ();
-
-		System.out.println ("drum part 1");
-		this.drumParts [1].dump ();
-
-		System.out.println ("drum part 2");
-		this.drumParts [2].dump ();
+		this.drumParts [0].dump (0);
+		this.keyboardParts [0].dump (0);
 	}
 	
 	public ESXDrumPart
@@ -48,7 +51,19 @@ extends BufferManager
 	{
 		return this.drumParts [inIndex];
 	}
-	
+
+	public ESXKeyboardPart
+	getKeyboardPart (int inIndex)
+	{
+		return this.keyboardParts [inIndex];
+	}
+
+	public int
+	getLastStep ()
+	{
+		return getByte (LAST_STEP_OFFSET);
+	}
+		
 	public void
 	setLastStep (int inLastStep)
 	{
@@ -87,6 +102,9 @@ extends BufferManager
 
 	private ESXDrumPart[]
 	drumParts	= null;
+	
+	private ESXKeyboardPart[]
+	keyboardParts	= null;
 	
 }
 

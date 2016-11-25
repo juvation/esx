@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import com.electribesx.model.ESXDrumPart;
 import com.electribesx.model.ESXFile;
+import com.electribesx.model.ESXKeyboardPart;
 import com.electribesx.model.ESXPattern;
 
 // POWER TOOL for reading and generating ESX files haha
@@ -121,45 +122,87 @@ public class ESXBuild
 				found = true;
 			}
 			
+			// DRUM PARTS
+			
 			for (int j = 0; j < 9; j++)
 			{
-				key = "pattern." + i + ".drumpart." + j + ".samplenumber";
+				ESXDrumPart	part = pattern.getDrumPart (j);
+
+				key = "pattern." + i + ".drumpart." + j + ".sample";
 				value = properties.getProperty (key);
 			
 				if (value != null && value.length () > 0)
 				{
 					found = true;
 					
-					ESXDrumPart	part = pattern.getDrumPart (j);
+					int	sampleNumber = Integer.parseInt (value);
+					
+					System.out.println ("setting pattern " + i + " drum part " + j + " to sample " + 
+						file.getSample (sampleNumber).getName ());
+
+					part.setSampleNumber (sampleNumber);
+					
+					// see if there's a pattern... :-)
+				}
+				
+				key = "pattern." + i + ".drumpart." + j + ".pattern";
+				value = properties.getProperty (key);
+		
+				if (value != null && value.length () > 0)
+				{
+					System.out.println ("setting pattern " + i + " drum part " + j + " to pattern " + value);
+
+					for (int k = 0; k < value.length () && k < 64; k++)
+					{
+						char	ch = value.charAt (k);
+						
+						if (ch == '.')
+						{
+							part.setSequenceStep (k, false);
+						}
+						else
+						{
+							part.setSequenceStep (k, true);
+						}
+					}
+				}
+			}
+			
+			// KEYBOARD PARTS
+			
+			for (int j = 0; j < 2; j++)
+			{
+				ESXKeyboardPart	part = pattern.getKeyboardPart (j);
+
+				key = "pattern." + i + ".keyboardpart." + j + ".sample";
+				value = properties.getProperty (key);
+			
+				if (value != null && value.length () > 0)
+				{
+					found = true;
+					
 					int	sampleNumber = Integer.parseInt (value);
 					
 					System.out.println ("setting pattern " + i + " part " + j + " to sample " + 
 						file.getSample (sampleNumber).getName ());
 
 					part.setSampleNumber (sampleNumber);
-					
-					// see if there's a pattern... :-)
-					
-					key = "pattern." + i + ".drumpart." + j + ".pattern";
-					value = properties.getProperty (key);
-			
-					if (value != null && value.length () > 0)
-					{
-						System.out.println ("setting pattern " + i + " part " + j + " to pattern " + value);
+				}
+				
+				// see if there's a pattern... :-)
+				
+				key = "pattern." + i + ".keyboardpart." + j + ".notes";
+				value = properties.getProperty (key);
+		
+				if (value != null && value.length () > 0)
+				{
+					System.out.println ("setting pattern " + i + " keyboard part " + j + " to notes " + value);
 
-						for (int k = 0; k < value.length () && k < 64; k++)
-						{
-							char	ch = value.charAt (k);
-							
-							if (ch == '.')
-							{
-								part.setSequenceStep (k, false);
-							}
-							else
-							{
-								part.setSequenceStep (k, true);
-							}
-						}
+					String[]	noteStrings = value.split (" ");
+					
+					for (int k = 0; k < noteStrings.length; k++)
+					{
+						part.setSequenceNote (k, noteStrings [k]);
 					}
 				}
 			}
