@@ -136,20 +136,22 @@ public class ESXBuild
 				throw new Exception ("drum part numbering runs 1-9");
 			}
 
-			for (int j = 1; j < 10; j++)
+			for (int j = 0; j < 9; j++)
 			{
 				// note drum parts are numbered 0-8 internally
-				// but numbered 1-9 on the electribe, and therefore also in the driver file
-				ESXDrumPart	part = pattern.getDrumPart (j - 1);
+				// but in the driver file, numbered as they are displayed on the Electribe itself
+				ESXDrumPart	part = pattern.getDrumPart (j);
 
-				key = "pattern." + i + ".drumpart." + j + ".sample";
+				String	partName = DRUM_PART_NAMES [j];
+				
+				key = "pattern." + i + ".drumpart." + partName + ".sample";
 				value = properties.getProperty (key);
 			
 				if (value != null && value.length () > 0)
 				{
 					int	sampleNumber = Integer.parseInt (value);
 					
-					System.out.println ("setting pattern " + i + " drum part " + j + " to sample " + 
+					System.out.println ("setting pattern " + i + " drum part " + partName + " to sample " + 
 						file.getSample (sampleNumber).getName ());
 
 					part.setSampleNumber (sampleNumber);
@@ -157,12 +159,12 @@ public class ESXBuild
 					// see if there's a pattern... :-)
 				}
 				
-				key = "pattern." + i + ".drumpart." + j + ".pattern";
+				key = "pattern." + i + ".drumpart." + partName + ".pattern";
 				value = properties.getProperty (key);
 		
 				if (value != null && value.length () > 0)
 				{
-					System.out.println ("setting pattern " + i + " drum part " + j + " to pattern " + value);
+					System.out.println ("setting pattern " + i + " drum part " + partName + " to pattern " + value);
 
 					for (int k = 0; k < value.length () && k < 64; k++)
 					{
@@ -245,6 +247,22 @@ public class ESXBuild
 		file = ESXFile.fromFile (newFile);
 		file.verify ();
 	}
+	
+	// PRIVATE STATIC CONSTANTS
+	
+	private static final String[]
+	DRUM_PART_NAMES =
+	{
+		"1",
+		"2",
+		"3",
+		"4",
+		"5",
+		"6A",
+		"6B",
+		"7A",
+		"7B"
+	};
 	
 	// PRIVATE DATA
 

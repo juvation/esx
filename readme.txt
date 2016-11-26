@@ -93,15 +93,17 @@ MAKING PATTERNS
 
 The tool supports various pattern-oriented operations, such as naming patterns and assigning samples to pattern parts, which are tiresome processes on the Electribe.
 
+Note that unlike samples, the Electribe numbers patterns and parts from one. If you attempt to set anything off pattern zero or part zero in the driver file, the builder tool will show an error. Note also that the tool currently refers to drum parts 1-9 even though the Electribe calls the last four 6A, 6B, 7A and 7B. This might be changed in a future rev of the tool.
+
 The following line names the first pattern “TR909” —
 
-pattern.0.name=TR909
+pattern.1.name=TR909
 
 The following line assigns sample 100 to the first drum part of the first pattern —
 
-pattern.0.drumpart.0.sample=100
+pattern.1.drumpart.1.sample=100
 
-For comparison, the following line assigns sample 50 to the 4th drum part of the 100th pattern —
+For comparison, the following line assigns sample 50 to the 4th drum part of pattern 100 —
 
 pattern.100.drumpart.4.sample=50
 

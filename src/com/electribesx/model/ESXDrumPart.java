@@ -20,7 +20,7 @@ extends BufferManager
 	public void
 	dump (int inPartNumber)
 	{
-		System.out.println ("Drum Part " + inPartNumber);
+		System.out.println ("Drum Part " + inPartNumber + " (" + PART_NAMES [inPartNumber] + ")");
 		
 		short	samplePointer = getBigEndian16 (SAMPLE_POINTER_OFFSET);
 
@@ -108,7 +108,21 @@ extends BufferManager
 	
 	private static final int
 	SEQUENCE_DATA_OFFSET = 0x12;
-			
+	
+	private static final String[]
+	PART_NAMES =
+	{
+		"1",
+		"2",
+		"3",
+		"4",
+		"5",
+		"6A",
+		"6B",
+		"7A",
+		"7B"
+	};
+		
 	// PRIVATE DATA
 	
 	private ESXPattern
