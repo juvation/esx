@@ -71,6 +71,12 @@ extends BufferManager
 		setByte (LAST_STEP_OFFSET, (byte) inLastStep);
 	}
 	
+	public String
+	getName ()
+	{
+		return getString (NAME_OFFSET, 8);
+	}
+	
 	public void
 	setName (String inName)
 	{

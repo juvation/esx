@@ -50,6 +50,19 @@ public class ESXPrint
 			}
 		}
 		else
+		if (mode.equals ("patterns"))
+		{
+			for (int i = 0; i < 256; i++)
+			{
+				String	name = file.getPattern (i).getName ();
+				
+				if (! name.equals ("        "))
+				{
+					System.out.println (i + " = '" + name + "'");
+				}
+			}
+		}
+		else
 		if (mode.equals ("mono"))
 		{
 			if (param == -1)

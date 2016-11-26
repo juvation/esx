@@ -96,9 +96,11 @@ public class ESXBuild
 		
 		// PATTERNS
 		
-		for (int i = 0; i < 256; i++)
+		for (int i = 1; i < 257; i++)
 		{
-			ESXPattern	pattern = file.getPattern (i);
+			// note patterns are numbered 0-255 internally
+			// but numbered 1-256 on the electribe, and therefore also in the driver file
+			ESXPattern	pattern = file.getPattern (i - 1);
 			
 			String	key = "pattern." + i + ".name";
 			String	value = properties.getProperty (key);
@@ -122,9 +124,11 @@ public class ESXBuild
 			
 			// DRUM PARTS
 			
-			for (int j = 0; j < 9; j++)
+			for (int j = 1; j < 10; j++)
 			{
-				ESXDrumPart	part = pattern.getDrumPart (j);
+				// note drum parts are numbered 0-8 internally
+				// but numbered 1-9 on the electribe, and therefore also in the driver file
+				ESXDrumPart	part = pattern.getDrumPart (j - 1);
 
 				key = "pattern." + i + ".drumpart." + j + ".sample";
 				value = properties.getProperty (key);
@@ -166,9 +170,11 @@ public class ESXBuild
 			
 			// KEYBOARD PARTS
 			
-			for (int j = 0; j < 2; j++)
+			for (int j = 1; j < 3; j++)
 			{
-				ESXKeyboardPart	part = pattern.getKeyboardPart (j);
+				// note keyboard parts are numbered 0-1 internally
+				// but numbered 1-2 on the electribe, and therefore also in the driver file
+				ESXKeyboardPart	part = pattern.getKeyboardPart (j - 1);
 
 				key = "pattern." + i + ".keyboardpart." + j + ".sample";
 				value = properties.getProperty (key);
