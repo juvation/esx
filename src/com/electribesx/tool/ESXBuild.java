@@ -96,6 +96,12 @@ public class ESXBuild
 		
 		// PATTERNS
 		
+		// check first that the user hasn't specified pattern 0
+		if (properties.getProperty ("pattern.0.name") != null)
+		{
+			throw new Exception ("pattern numbering starts from 1");
+		}
+		
 		for (int i = 1; i < 257; i++)
 		{
 			// note patterns are numbered 0-255 internally
@@ -124,6 +130,12 @@ public class ESXBuild
 			
 			// DRUM PARTS
 			
+			// check first that the user hasn't specified part 0
+			if (properties.getProperty ("pattern." + i + ".drumpart.0.sample") != null)
+			{
+				throw new Exception ("drum part numbering runs 1-9");
+			}
+
 			for (int j = 1; j < 10; j++)
 			{
 				// note drum parts are numbered 0-8 internally
@@ -170,6 +182,12 @@ public class ESXBuild
 			
 			// KEYBOARD PARTS
 			
+			// check first that the user hasn't specified part 0
+			if (properties.getProperty ("pattern." + i + ".keyboard.0.sample") != null)
+			{
+				throw new Exception ("keyboard part numbering runs 1-2");
+			}
+
 			for (int j = 1; j < 3; j++)
 			{
 				// note keyboard parts are numbered 0-1 internally
