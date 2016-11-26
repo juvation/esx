@@ -2,6 +2,8 @@ package com.electribesx.tool;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import com.electribesx.model.ESXDrumPart;
@@ -119,15 +121,84 @@ public class ESXBuild
 			System.out.println ("setting pattern " + i + " name to " + value);
 			pattern.setName (value);
 
+			// tempo
+			
+			key = "pattern." + i + ".tempo";
+			value = properties.getProperty (key);
+			
+			if (value != null && value.length () > 0)
+			{
+				System.out.println ("setting pattern " + i + " tempo to " + value);
+				
+				pattern.setTempo (Float.parseFloat (value));
+			}
+
+			// length in bars (kinda)
+			
+			key = "pattern." + i + ".length";
+			value = properties.getProperty (key);
+			
+			if (value != null && value.length () > 0)
+			{
+				System.out.println ("setting pattern " + i + " length to " + value);
+
+				int	length = Integer.parseInt (value);
+				
+				if (length >= 1 && length <= 8)
+				{
+					pattern.setLastStep (length - 1);
+				}
+				else
+				{
+					throw new Exception ("length must be in range 1-8");
+				}
+			}
+			
+			// beat type 
+			
+			key = "pattern." + i + ".beat";
+			value = properties.getProperty (key);
+			
+			if (value != null && value.length () > 0)
+			{
+				System.out.println ("setting pattern " + i + " beat to " + value);
+
+				// this is stupid
+				List<String>	beatNameList = Arrays.asList (PATTERN_BEAT_NAMES);
+				
+				int	index = beatNameList.indexOf (value);
+				
+				if (index >= 0)
+				{
+					pattern.setBeat (index);
+				}
+				else
+				{
+					throw new Exception ("beat must be one of 16/32/8T/16T");
+				}
+			}
+
+			// last step in each bar (kinda)
+			
 			key = "pattern." + i + ".laststep";
 			value = properties.getProperty (key);
 			
 			if (value != null && value.length () > 0)
 			{
 				System.out.println ("setting pattern " + i + " last step to " + value);
-				pattern.setLastStep (Integer.parseInt (value));
+				
+				int	lastStep = Integer.parseInt (value);
+				
+				if (lastStep >= 1 && lastStep <= 16)
+				{
+					pattern.setLastStep (lastStep - 1);
+				}
+				else
+				{
+					throw new Exception ("last step must be in range 1-16");
+				}
 			}
-			
+
 			// DRUM PARTS
 			
 			// check first that the user hasn't specified part 0
@@ -250,6 +321,15 @@ public class ESXBuild
 	
 	// PRIVATE STATIC CONSTANTS
 	
+	private static final String[]
+	PATTERN_BEAT_NAMES =
+	{
+		"16",
+		"32",
+		"8T",
+		"16T"
+	};
+
 	private static final String[]
 	DRUM_PART_NAMES =
 	{

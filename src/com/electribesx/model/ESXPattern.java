@@ -35,16 +35,32 @@ extends BufferManager
 	{
 		System.out.println ("PATTERN " + inPatternNumber + " = '" + getString (NAME_OFFSET, 8) + "'");
 
-		int	tempo = getBigEndian16 (TEMPO_OFFSET);
-		int	integerTempo = (tempo >> 7) & 0x1ffff;
-		int	fractionTempo = tempo & 0xf;
+		System.out.println ("tempo = " + getTempo ());
+
+		int	length = getLength ();
+		System.out.println ("length = " + length + " (" + (length + 1) + ")");
+
+		System.out.println ("beat = " + getBeat () + " (" + getBeatString () + ")");
 		
-		System.out.println ("tempo = " + integerTempo + "." + fractionTempo);
-		System.out.println ("pattern config = " + getByte (CONFIG_FLAGS_OFFSET));
-		System.out.println ("last step = " + getByte (LAST_STEP_OFFSET));
+		int	lastStep = getLastStep ();
+		System.out.println ("last step = " + lastStep + " (" + (lastStep + 1) + ")");
 		
 		this.drumParts [0].dump (0);
 		this.keyboardParts [0].dump (0);
+	}
+	
+	public int
+	getBeat ()
+	{
+		byte	beat = getByte (CONFIG_FLAGS_OFFSET);
+		
+		return (beat >> 4) & 0x3;
+	}
+
+	public String
+	getBeatString ()
+	{
+		return BEAT_NAMES [getBeat ()];
 	}
 	
 	public ESXDrumPart
@@ -64,23 +80,79 @@ extends BufferManager
 	{
 		return getByte (LAST_STEP_OFFSET);
 	}
-		
-	public void
-	setLastStep (int inLastStep)
+
+	public int
+	getLength ()
 	{
-		setByte (LAST_STEP_OFFSET, (byte) inLastStep);
+		return getByte (CONFIG_FLAGS_OFFSET) & 0x7;
 	}
-	
+		
 	public String
 	getName ()
 	{
 		return getString (NAME_OFFSET, 8);
 	}
 	
+	public float
+	getTempo ()
+	{
+		int	tempoBits = getBigEndian16 (TEMPO_OFFSET);
+		int	integerTempo = (tempoBits >> 7) & 0x1ffff;
+		int	fractionTempo = tempoBits & 0xf;
+
+		float	tempo = (integerTempo * 10) + fractionTempo;
+		tempo /= 10;
+		
+		return tempo;
+	}
+	
+	public void
+	setBeat (int inBeat)
+	{
+		byte	configFlags = getByte (CONFIG_FLAGS_OFFSET);
+		configFlags &= (0x3 << 4);
+		
+		inBeat &= 0x3;
+		inBeat <<= 4;
+		configFlags |= inBeat;
+		
+		setByte (CONFIG_FLAGS_OFFSET, configFlags);
+	}
+	
+	public void
+	setLastStep (int inLastStep)
+	{
+		setByte (LAST_STEP_OFFSET, (byte) inLastStep);
+	}
+	
+	public void
+	setLength (int inLength)
+	{
+		byte	configFlags = getByte (CONFIG_FLAGS_OFFSET);
+		configFlags &= 0x7;
+
+		inLength &= 0x7;
+		configFlags |= inLength;
+		
+		setByte (CONFIG_FLAGS_OFFSET, configFlags);
+	}
+	
 	public void
 	setName (String inName)
 	{
 		setString (NAME_OFFSET, inName, 8, ' ');
+	}
+	
+	public void
+	setTempo (float inTempo)
+	{
+		int	integerTempo = (int) Math.floor (inTempo);
+		int	fractionTempo = (int) ((inTempo - integerTempo) * 10);
+
+		int	tempo = fractionTempo & 0xf;
+		tempo |= (integerTempo & 0x1ffff) << 7;
+		
+		setBigEndian16 (TEMPO_OFFSET, tempo);
 	}
 	
 	// PUBLIC CONSTANTS
@@ -107,6 +179,15 @@ extends BufferManager
 	
 	private static final int
 	KEYBOARD_PARTS_OFFSET = 0x14a;
+	
+	private static final String[]
+	BEAT_NAMES =
+	{
+		"16",
+		"32",
+		"8T",
+		"16T"
+	};
 	
 	// private data
 

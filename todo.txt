@@ -9,6 +9,9 @@ mono wav export
 verifier
 stereo wav export
 set sample end to loop end on wav import
+name things by the official front panel names where possible
+support setting "beat" and other options in driver file
+last step should be 1-16 not 0-15 in driver file
 
 TODO
 
