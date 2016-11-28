@@ -132,6 +132,15 @@ extends BufferManager
 		return this.stereoSamples [inIndex];
 	}
 	
+	public void
+	copyPattern (ESXFile inFile, int inPatternIndex, int outPatternIndex)
+	{
+		int	inOffset = PATTERNS_OFFSET + (ESXPattern.BUFFER_SIZE * inPatternIndex);
+		int	outOffset = PATTERNS_OFFSET + (ESXPattern.BUFFER_SIZE * outPatternIndex);
+		
+		copyIn (inFile.buffer, inOffset, outOffset, ESXPattern.BUFFER_SIZE);
+	}
+	
 	// note this will ONLY work on a freshly loaded ESXFile
 	// as it will have everything properly serialised in the ESXFile buffer
 	public void

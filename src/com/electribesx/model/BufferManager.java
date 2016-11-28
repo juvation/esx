@@ -55,6 +55,18 @@ public class BufferManager
 
 	// PUBLIC METHODS
 	
+	public void
+	copyIn (byte[] inBuffer, int inOffset, int outOffset, int inLength)
+	{
+		System.arraycopy (inBuffer, inOffset, this.buffer, outOffset, inLength);
+	}
+
+	public void
+	copyOut (int inOffset, byte[] outBuffer, int outOffset, int inLength)
+	{
+		System.arraycopy (this.buffer, inOffset, outBuffer, outOffset, inLength);
+	}
+	
 	public byte
 	getByte (int inOffset)
 	{
