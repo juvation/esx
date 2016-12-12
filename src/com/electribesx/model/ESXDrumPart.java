@@ -64,6 +64,13 @@ extends BufferManager
 	}
 	
 	public void
+	setLevel (byte inLevel)
+	{
+		inLevel &= 0x7f;
+		setByte (LEVEL_OFFSET, inLevel);
+	}
+	
+	public void
 	setSampleNumber (int inSampleNumber)
 	{
 		setBigEndian16 (SAMPLE_POINTER_OFFSET, inSampleNumber);
@@ -105,6 +112,9 @@ extends BufferManager
 	
 	private static final int
 	FILTER_RESONANCE_OFFSET = 0x6;
+
+	private static final int
+	LEVEL_OFFSET = 0x9;
 	
 	private static final int
 	SEQUENCE_DATA_OFFSET = 0x12;

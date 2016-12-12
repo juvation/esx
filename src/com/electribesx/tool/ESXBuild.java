@@ -230,6 +230,23 @@ public class ESXBuild
 					// see if there's a pattern... :-)
 				}
 				
+				key = "pattern." + i + ".drumpart." + j + ".level";
+				value = properties.getProperty (key);
+			
+				if (value != null && value.length () > 0)
+				{
+					int	level = Integer.parseInt (value);
+					
+					if (level < 0 || level > 127)
+					{
+						throw new Exception ("level must be 0-127");
+					}
+					
+					System.out.println ("setting pattern " + i + " part " + j + " to level " + level);
+
+					part.setLevel ((byte) level);
+				}
+				
 				key = "pattern." + i + ".drumpart." + partName + ".pattern";
 				value = properties.getProperty (key);
 		
@@ -279,10 +296,27 @@ public class ESXBuild
 
 					part.setSampleNumber (sampleNumber);
 				}
+
+				key = "pattern." + i + ".keyboardpart." + j + ".level";
+				value = properties.getProperty (key);
+			
+				if (value != null && value.length () > 0)
+				{
+					int	level = Integer.parseInt (value);
+					
+					if (level < 0 || level > 127)
+					{
+						throw new Exception ("level must be 0-127");
+					}
+					
+					System.out.println ("setting pattern " + i + " part " + j + " to level " + level);
+
+					part.setLevel ((byte) level);
+				}
 				
 				// see if there's a pattern... :-)
 				
-				key = "pattern." + i + ".keyboardpart." + j + ".notes";
+				key = "pattern." + i + ".keyboardpart." + j + ".sequence";
 				value = properties.getProperty (key);
 		
 				if (value != null && value.length () > 0)

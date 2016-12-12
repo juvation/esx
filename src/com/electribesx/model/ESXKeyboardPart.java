@@ -84,6 +84,13 @@ extends BufferManager
 	}
 	
 	public void
+	setLevel (byte inLevel)
+	{
+		inLevel &= 0x7f;
+		setByte (LEVEL_OFFSET, inLevel);
+	}
+	
+	public void
 	setSampleNumber (int inSampleNumber)
 	{
 		setBigEndian16 (SAMPLE_POINTER_OFFSET, inSampleNumber);
@@ -164,9 +171,7 @@ extends BufferManager
 			throw new Exception ("setSequenceStepNote with bad note string: " + inNoteString);
 		}
 		
-		byte	noteByte = (byte) noteNumber;
-		
-		setByte (SEQUENCE_DATA_NOTE_OFFSET + inStepNumber, noteByte);
+		setByte (SEQUENCE_DATA_NOTE_OFFSET + inStepNumber, (byte) noteNumber);
 	}
 	
 	// PUBLIC CONSTANTS
@@ -184,6 +189,9 @@ extends BufferManager
 	
 	private static final int
 	FILTER_RESONANCE_OFFSET = 0x7;
+	
+	private static final int
+	LEVEL_OFFSET = 0x9;
 	
 	private static final int
 	SEQUENCE_DATA_NOTE_OFFSET = 0x12;
