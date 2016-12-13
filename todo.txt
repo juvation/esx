@@ -12,11 +12,12 @@ set sample end to loop end on wav import
 name things by the official front panel names where possible
 support setting "beat" and other options in driver file
 last step should be 1-16 not 0-15 in driver file
+copy patterns from one esx file to another
 
 TODO
 
-copy patterns from one esx file to another
 figure out what the gate time values are all about
+make driver file from esx file
 convert sample tune to midi note equivalent and back again? tricky...
 allow deletion of samples from a loaded ESX file
 stress testing on the factory ESX file
