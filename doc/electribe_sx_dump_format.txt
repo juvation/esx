@@ -244,5 +244,12 @@ SAMPLE_END_MAGIC
 0x00000008	00000004		0x017ffffe magic
 0x0000000c	00000004		0x00ffffff magic
 
+// FLAGS
+
+PATTERN_CONFIG_FLAGS
+
+0..5			length in bars
+6..7			beat (16, 32, 8T, 16T)
+
 
 

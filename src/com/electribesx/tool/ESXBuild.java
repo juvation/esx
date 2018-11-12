@@ -146,7 +146,7 @@ public class ESXBuild
 				
 				if (length >= 1 && length <= 8)
 				{
-					pattern.setLastStep (length - 1);
+					pattern.setLength (length - 1);
 				}
 				else
 				{

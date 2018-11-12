@@ -8,6 +8,7 @@ pattern set/clear step
 mono wav export
 verifier
 stereo wav export
+config note sequences
 set sample end to loop end on wav import
 name things by the official front panel names where possible
 support setting "beat" and other options in driver file
@@ -22,7 +23,4 @@ convert sample tune to midi note equivalent and back again? tricky...
 allow deletion of samples from a loaded ESX file
 stress testing on the factory ESX file
 some sample operations, like normalisation, denoise? etc
-config more part types than just drums
-config note sequences?
-
 
