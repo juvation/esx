@@ -14,10 +14,10 @@ name things by the official front panel names where possible
 support setting "beat" and other options in driver file
 last step should be 1-16 not 0-15 in driver file
 copy patterns from one esx file to another
+we still don't get length and last step right somehow
 
 TODO
 
-we still don't get length and last step right somehow
 figure out what the gate time values are all about
 make driver file from esx file
 convert sample tune to midi note equivalent and back again? tricky...
