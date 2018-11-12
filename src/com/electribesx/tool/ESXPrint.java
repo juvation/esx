@@ -46,7 +46,31 @@ public class ESXPrint
 			}
 			else
 			{
-				file.getPattern (param).dump (param);
+				if (param == 0)
+				{
+					System.err.println ("pattern numbers start at 1");
+					System.exit (1);
+				}
+				
+				file.getPattern (param - 1).dump (param);
+			}
+		}
+		else
+		if (mode.equals ("patternheader"))
+		{
+			if (param == -1)
+			{
+				file.getPattern (0).dumpHeader (0);
+			}
+			else
+			{
+				if (param == 0)
+				{
+					System.err.println ("pattern numbers start at 1");
+					System.exit (1);
+				}
+				
+				file.getPattern (param - 1).dumpHeader (param);
 			}
 		}
 		else

@@ -17,6 +17,7 @@ copy patterns from one esx file to another
 
 TODO
 
+we still don't get length and last step right somehow
 figure out what the gate time values are all about
 make driver file from esx file
 convert sample tune to midi note equivalent and back again? tricky...

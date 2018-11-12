@@ -49,6 +49,22 @@ extends BufferManager
 		this.keyboardParts [0].dump (0);
 	}
 	
+	public void
+	dumpHeader (int inPatternNumber)
+	{
+		System.out.println ("PATTERN " + inPatternNumber + " = '" + getString (NAME_OFFSET, 8) + "'");
+
+		// the pattern header is 17 bytes - 8 for the name
+		for (int i = 8; i < 17; i++)
+		{
+			// stupid Java thinks that bytes are signed
+			int	b = getByte (i);
+			b &= 0xff;
+			
+			System.out.println ("[" + i + "] = 0x" + Integer.toHexString (b));
+		}
+	}
+	
 	public int
 	getBeat ()
 	{
@@ -110,7 +126,9 @@ extends BufferManager
 	setBeat (int inBeat)
 	{
 		byte	configFlags = getByte (CONFIG_FLAGS_OFFSET);
-		configFlags &= (0x3 << 4);
+
+		// zero out our bits, leaving the length ones intact
+		configFlags &= 0x07;
 		
 		inBeat &= 0x3;
 		inBeat <<= 4;
@@ -129,12 +147,14 @@ extends BufferManager
 	setLength (int inLength)
 	{
 		byte	configFlags = getByte (CONFIG_FLAGS_OFFSET);
-		configFlags &= 0x7;
+		
+		// zero out our bits, leaving the beat ones intact
+		configFlags &= 0xf8;
 
 		inLength &= 0x7;
 		configFlags |= inLength;
-		
-		setByte (CONFIG_FLAGS_OFFSET, configFlags);
+
+		setByte (CONFIG_FLAGS_OFFSET, (byte) configFlags);
 	}
 	
 	public void
