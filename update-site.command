@@ -41,7 +41,7 @@ scp -i $PEM_PATH electribesx.zip ec2-user@electribesx.com:electribesx.com
 
 # now copy the site stuffs
 scp -i $PEM_PATH site/*.* ec2-user@electribesx.com:electribesx.com
-ssh -i $PEM_PATH ec2-user@electribesx.com mkdir -p electribesx.com/positron
-scp -i $PEM_PATH site/positron/*.* ec2-user@electribesx.com:electribesx.com/positron/
+# ssh -i $PEM_PATH ec2-user@electribesx.com mkdir -p electribesx.com/positron
+# scp -i $PEM_PATH site/positron/*.* ec2-user@electribesx.com:electribesx.com/positron/
 
 

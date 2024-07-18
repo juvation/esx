@@ -59,7 +59,7 @@ extends BufferManager
 				(this.buffer, MONO_SAMPLE_HEADERS_OFFSET + (i * ESXMonoSample.BUFFER_SIZE));
 		}
 
-		this.stereoSamples = new ESXStereoSample [256];
+		this.stereoSamples = new ESXStereoSample [128];
 
 		for (int i = 0; i < 128; i++)
 		{
